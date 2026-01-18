@@ -34,3 +34,4 @@ jobs:
         name: macos-liquid-arch-iso
         path: out/*.iso
         retention-days: 30
+
