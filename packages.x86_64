@@ -1,0 +1,87 @@
+# Базовая система
+base
+base-devel
+linux
+linux-firmware
+linux-headers
+
+# Загрузчик
+grub
+efibootmgr
+os-prober
+
+# Сеть
+networkmanager
+network-manager-applet
+nm-connection-editor
+
+# KDE Plasma
+plasma-meta
+plasma-wayland-session
+kde-applications-meta
+sddm
+sddm-kcm
+
+# Latte Dock
+latte-dock
+
+# Кастомизация
+kvantum
+kvantum-qt5
+latte-dock
+kwin-bismuth
+
+# Темы и иконки
+papirus-icon-theme
+breeze
+breeze-gtk
+
+# Шрифты
+ttf-dejavu
+ttf-liberation
+noto-fonts
+noto-fonts-emoji
+ttf-roboto
+ttf-opensans
+
+# Приложения
+firefox
+dolphin
+konsole
+kate
+spectacle
+gwenview
+okular
+ark
+
+# Установщик
+calamares
+
+# Утилиты
+git
+wget
+curl
+vim
+nano
+htop
+neofetch
+
+# Аудио
+pipewire
+pipewire-alsa
+pipewire-pulse
+pipewire-jack
+wireplumber
+
+# Bluetooth
+bluez
+bluez-utils
+bluedevil
+
+# Принтеры
+cups
+print-manager
+
+# Дополнительно
+xdg-user-dirs
+xdg-utils

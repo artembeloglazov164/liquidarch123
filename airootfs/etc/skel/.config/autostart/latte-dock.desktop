@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=Latte Dock
+Comment=Latte is a dock based on plasma frameworks
+Icon=latte-dock
+Exec=latte-dock
+Terminal=false
+Categories=Utility;
+X-DBUS-StartupType=Unique
+X-KDE-StartupNotify=false
+OnlyShowIn=KDE;
+X-KDE-autostart-after=panel
+X-KDE-autostart-phase=2

@@ -1,0 +1,17 @@
+[General]
+ColorScheme=macOSLiquid
+Name=macOS Liquid
+shadeSortColumn=true
+
+[KDE]
+LookAndFeelPackage=org.kde.breezedark.desktop
+SingleClick=false
+widgetStyle=kvantum
+
+[WM]
+activeBackground=30,30,46
+activeBlend=30,30,46
+activeForeground=205,214,244
+inactiveBackground=24,24,37
+inactiveBlend=24,24,37
+inactiveForeground=147,153,178

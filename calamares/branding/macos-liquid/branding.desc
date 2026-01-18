@@ -1,0 +1,28 @@
+---
+componentName:  macos-liquid
+
+strings:
+    productName:         "macOS Liquid Arch"
+    shortProductName:    "macOS Liquid"
+    version:             "26.0"
+    shortVersion:        "26"
+    versionedName:       "macOS Liquid Arch 26"
+    shortVersionedName:  "macOS Liquid 26"
+    bootloaderEntryName: "macOS Liquid Arch"
+    productUrl:          "https://macos-liquid-arch.org/"
+    supportUrl:          "https://macos-liquid-arch.org/support/"
+    knownIssuesUrl:      "https://macos-liquid-arch.org/issues/"
+    releaseNotesUrl:     "https://macos-liquid-arch.org/release-notes/"
+
+images:
+    productLogo:         "logo.png"
+    productIcon:         "icon.png"
+    productWelcome:      "welcome.png"
+
+slideshow:               "show.qml"
+
+style:
+   sidebarBackground:    "#1e1e2e"
+   sidebarText:          "#cdd6f4"
+   sidebarTextSelect:    "#f5c2e7"
+   sidebarTextHighlight: "#f5c2e7"

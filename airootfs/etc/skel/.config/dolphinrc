@@ -1,0 +1,16 @@
+[General]
+ShowFullPath=true
+ShowSpaceInfo=true
+Version=202
+ViewPropsTimestamp=2024,1,1,0,0,0
+
+[MainWindow]
+MenuBar=Disabled
+ToolBarsMovable=Disabled
+State=AAAA/wAAAAD9AAAAAAAAA+gAAAKYAAAABAAAAAQAAAAIAAAACPwAAAAA
+
+[PreviewSettings]
+Plugins=appimagethumbnail,audiothumbnail,blenderthumbnail,comicbookthumbnail,djvuthumbnail,ebookthumbnail,exrthumbnail,directorythumbnail,fontthumbnail,imagethumbnail,jpegthumbnail,kraorathumbnail,windowsexethumbnail,windowsimagethumbnail,opendocumentthumbnail,svgthumbnail
+
+[VersionControl]
+enabledPlugins=Git

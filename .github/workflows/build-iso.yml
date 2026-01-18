@@ -1,0 +1,36 @@
+name: Build ISO
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: Update system
+      run: |
+        pacman -Syu --noconfirm
+        pacman -S --noconfirm archiso git
+    
+    - name: Build ISO
+      run: |
+        cd build
+        chmod +x build.sh
+        ./build.sh
+    
+    - name: Upload ISO
+      uses: actions/upload-artifact@v3
+      with:
+        name: macos-liquid-arch-iso
+        path: out/*.iso
+        retention-days: 30

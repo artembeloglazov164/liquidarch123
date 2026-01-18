@@ -1,0 +1,24 @@
+# Build artifacts
+out/
+work/
+*.iso
+*.img
+
+# Temporary files
+*.tmp
+*.log
+*~
+.DS_Store
+
+# Cache
+*.cache
+__pycache__/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# System
+Thumbs.db

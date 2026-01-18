@@ -1,0 +1,10 @@
+[Desktop Entry]
+DefaultProfile=macOS-Liquid.profile
+
+[MainWindow]
+MenuBar=Disabled
+ToolBarsMovable=Disabled
+
+[TabBar]
+TabBarPosition=Top
+TabBarVisibility=ShowTabBarWhenNeeded

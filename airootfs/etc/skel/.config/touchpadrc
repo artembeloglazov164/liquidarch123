@@ -1,0 +1,28 @@
+[Touchpad]
+# Жесты тачпада в стиле macOS
+
+# Свайп 3 пальцами влево/вправо - переключение рабочих столов
+SwipeLeft3=switch-to-next-desktop
+SwipeRight3=switch-to-previous-desktop
+
+# Свайп 4 пальцами вверх - Mission Control
+SwipeUp4=show-desktop-grid
+
+# Свайп 4 пальцами вниз - показать рабочий стол
+SwipeDown4=minimize-all
+
+# Pinch - масштабирование
+PinchIn=zoom-out
+PinchOut=zoom-in
+
+# Tap to click
+TapToClick=true
+
+# Natural scrolling (как в macOS)
+NaturalScrolling=true
+
+# Скорость курсора
+PointerAcceleration=0.5
+
+# Двойной тап - правая кнопка мыши
+TwoFingerTap=right-click
