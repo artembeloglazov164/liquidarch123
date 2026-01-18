@@ -5,14 +5,11 @@ set -e
 
 echo "📦 Сборка AUR пакетов..."
 
-# Проверка что не запущен от root
-if [ "$EUID" -eq 0 ]; then 
-    echo "❌ Не запускайте этот скрипт от root!"
-    exit 1
-fi
-
 # Создание директории для пакетов
 mkdir -p ../airootfs/opt/aur-packages
+
+# Установка зависимостей для сборки
+sudo pacman -S --needed --noconfirm git base-devel
 
 # Установка yay если не установлен
 if ! command -v yay &> /dev/null; then
@@ -25,14 +22,18 @@ if ! command -v yay &> /dev/null; then
     rm -rf yay-bin
 fi
 
+# Получаем абсолютный путь к директории проекта
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PACKAGES_DIR="$PROJECT_DIR/airootfs/opt/aur-packages"
+
 # Сборка Latte Dock
 echo "🔨 Сборка Latte Dock..."
 cd /tmp
 rm -rf latte-dock
 git clone https://aur.archlinux.org/latte-dock.git
 cd latte-dock
-makepkg --noconfirm
-cp *.pkg.tar.zst ../../airootfs/opt/aur-packages/
+makepkg --noconfirm --skippgpcheck
+cp *.pkg.tar.zst "$PACKAGES_DIR/"
 
 # Сборка Calamares
 echo "🔨 Сборка Calamares..."
@@ -40,11 +41,13 @@ cd /tmp
 rm -rf calamares
 git clone https://aur.archlinux.org/calamares.git
 cd calamares
-makepkg --noconfirm
-cp *.pkg.tar.zst ../../airootfs/opt/aur-packages/
+makepkg --noconfirm --skippgpcheck
+cp *.pkg.tar.zst "$PACKAGES_DIR/"
 
 # Очистка
 cd /tmp
 rm -rf latte-dock calamares
 
-echo "✅ Пакеты собраны и сохранены в airootfs/opt/aur-packages/"
+echo "✅ Пакеты собраны и сохранены в $PACKAGES_DIR/"
+ls -lh "$PACKAGES_DIR/"
+
