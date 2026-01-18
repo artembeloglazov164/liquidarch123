@@ -15,7 +15,7 @@ jobs:
     
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     
     - name: Update system
       run: |
@@ -29,7 +29,7 @@ jobs:
         ./build.sh
     
     - name: Upload ISO
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: macos-liquid-arch-iso
         path: out/*.iso

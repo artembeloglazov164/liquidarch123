@@ -72,16 +72,3 @@ pipewire-alsa
 pipewire-pulse
 pipewire-jack
 wireplumber
-
-# Bluetooth
-bluez
-bluez-utils
-bluedevil
-
-# Принтеры
-cups
-print-manager
-
-# Дополнительно
-xdg-user-dirs
-xdg-utils
