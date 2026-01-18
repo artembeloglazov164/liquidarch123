@@ -24,9 +24,6 @@ fi
 echo "📦 Установка Latte Dock..."
 yay -S --noconfirm latte-dock
 
-echo "📦 Установка Calamares..."
-yay -S --noconfirm calamares
-
 echo "📦 Установка дополнительных тем..."
 yay -S --noconfirm kvantum-theme-materia
 

@@ -17,5 +17,15 @@ Current=breeze
 Numlock=on
 EOF
 
+# Установка предсобранных AUR пакетов
+if [ -d /opt/aur-packages ]; then
+    echo "📦 Установка предсобранных AUR пакетов..."
+    pacman -U --noconfirm /opt/aur-packages/*.pkg.tar.zst || echo "⚠️  Некоторые пакеты не установлены"
+    rm -rf /opt/aur-packages
+fi
+
+# Включение автозапуска Calamares в Live режиме
+systemctl enable calamares-autostart.service || true
+
 echo "✅ Кастомизация завершена!"
 
