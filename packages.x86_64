@@ -4,6 +4,9 @@ base-devel
 linux
 linux-firmware
 linux-headers
+mkinitcpio
+mkinitcpio-archiso
+arch-install-scripts
 
 # Загрузчик
 grub
