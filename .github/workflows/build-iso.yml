@@ -23,9 +23,9 @@ jobs:
         pacman -Syu --noconfirm
         pacman -S --noconfirm archiso git base-devel sudo
     
-    - name: Install KDE dependencies
+    - name: Install KDE dependencies for building
       run: |
-        pacman -S --noconfirm kf5 qt5-base qt5-declarative qt5-x11extras cmake extra-cmake-modules
+        pacman -S --noconfirm plasma-desktop plasma-workspace kwayland qt5-base qt5-declarative qt5-x11extras cmake extra-cmake-modules
     
     - name: Build AUR packages
       run: |
