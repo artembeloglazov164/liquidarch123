@@ -21,26 +21,13 @@ jobs:
     - name: Update system
       run: |
         pacman -Syu --noconfirm
-        pacman -S --noconfirm archiso git base-devel sudo
-    
-    - name: Install KDE dependencies for building
-      run: |
-        pacman -S --noconfirm plasma-desktop plasma-workspace kwayland qt5-base qt5-declarative qt5-x11extras cmake extra-cmake-modules
-    
-    - name: Build AUR packages
-      run: |
-        useradd -m builder
-        echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-        chown -R builder:builder .
-        cd build
-        chmod +x build-aur-packages.sh
-        sudo -u builder bash build-aur-packages.sh
+        pacman -S --noconfirm archiso git
     
     - name: Build ISO
       run: |
         cd build
         chmod +x build.sh
-        echo "y" | bash build.sh
+        bash build.sh
     
     - name: Upload ISO
       uses: actions/upload-artifact@v4
@@ -48,4 +35,3 @@ jobs:
         name: macos-liquid-arch-iso
         path: out/*.iso
         retention-days: 30
-

@@ -5,27 +5,30 @@ set -e -u
 
 # Включение служб
 systemctl enable NetworkManager
-systemctl enable sddm
+systemctl enable gdm
 
-# Настройка SDDM
-mkdir -p /etc/sddm.conf.d
-cat > /etc/sddm.conf.d/kde_settings.conf << 'EOF'
-[Theme]
-Current=breeze
+# Настройка GDM
+mkdir -p /etc/gdm
 
-[General]
-Numlock=on
+# Автологин для live пользователя (опционально)
+# cat > /etc/gdm/custom.conf << 'EOF'
+# [daemon]
+# AutomaticLoginEnable=True
+# AutomaticLogin=liveuser
+# EOF
+
+# Создание скрипта автонастройки для пользователя
+mkdir -p /etc/skel/.config/autostart
+cat > /etc/skel/.config/autostart/setup-macos-style.desktop << 'EOF'
+[Desktop Entry]
+Type=Application
+Name=Setup macOS Style
+Exec=/usr/local/bin/setup-macos-style.sh
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
 EOF
 
-# Установка предсобранных AUR пакетов
-if [ -d /opt/aur-packages ]; then
-    echo "📦 Установка предсобранных AUR пакетов..."
-    pacman -U --noconfirm /opt/aur-packages/*.pkg.tar.zst || echo "⚠️  Некоторые пакеты не установлены"
-    rm -rf /opt/aur-packages
-fi
-
-# Включение автозапуска Calamares в Live режиме
-systemctl enable calamares-autostart.service || true
+chmod +x /usr/local/bin/setup-macos-style.sh
 
 echo "✅ Кастомизация завершена!"
-

@@ -14,24 +14,20 @@ syslinux
 # Сеть
 networkmanager
 network-manager-applet
-nm-connection-editor
 
-# KDE Plasma
-plasma-desktop
-plasma-workspace
-plasma-nm
-plasma-pa
-kde-applications
-sddm
+# GNOME
+gnome
+gnome-extra
+gdm
 
-# Кастомизация
-kvantum
-kvantum-qt5
+# GNOME расширения для macOS стиля
+gnome-shell-extensions
+gnome-tweaks
 
 # Темы и иконки
 papirus-icon-theme
-breeze
-breeze-gtk
+arc-gtk-theme
+arc-icon-theme
 
 # Шрифты
 ttf-dejavu
@@ -43,13 +39,13 @@ ttf-opensans
 
 # Приложения
 firefox
-dolphin
-konsole
-kate
-spectacle
-gwenview
-okular
-ark
+nautilus
+gnome-terminal
+gnome-text-editor
+gnome-screenshot
+eog
+evince
+file-roller
 
 # Утилиты
 git
@@ -61,8 +57,18 @@ htop
 fastfetch
 
 # Аудио
-pipewire
-pipewire-alsa
-pipewire-pulse
-pipewire-jack
-wireplumber
+pulseaudio
+pulseaudio-alsa
+pulseaudio-bluetooth
+pavucontrol
+
+# Bluetooth
+bluez
+bluez-utils
+
+# Принтеры
+cups
+
+# Дополнительно
+xdg-user-dirs
+xdg-utils

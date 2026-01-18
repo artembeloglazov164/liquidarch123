@@ -3,7 +3,7 @@
 
 set -e
 
-echo "🍎 Начинаем сборку macOS Liquid Arch..."
+echo "🍎 Начинаем сборку macOS Liquid Arch (GNOME Edition)..."
 
 # Проверка прав root
 if [ "$EUID" -ne 0 ]; then 
@@ -15,18 +15,6 @@ fi
 if ! pacman -Qi archiso &> /dev/null; then
     echo "📦 Установка archiso..."
     pacman -S --noconfirm archiso
-fi
-
-# Сборка AUR пакетов (если еще не собраны)
-if [ ! -d "../airootfs/opt/aur-packages" ] || [ -z "$(ls -A ../airootfs/opt/aur-packages 2>/dev/null)" ]; then
-    echo "📦 Сборка AUR пакетов..."
-    echo "⚠️  Запустите сначала: bash build-aur-packages.sh"
-    echo "Или пропустите этот шаг (пакеты можно установить позже)"
-    read -p "Продолжить без AUR пакетов? (y/n) " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        exit 1
-    fi
 fi
 
 # Копирование профиля
