@@ -9,6 +9,7 @@ linux-headers
 grub
 efibootmgr
 os-prober
+syslinux
 
 # Сеть
 networkmanager
