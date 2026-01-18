@@ -3,17 +3,16 @@
 
 echo "🍎 Настройка macOS стиля для GNOME..."
 
-# Установка темы Reversal
-gsettings set org.gnome.desktop.interface gtk-theme 'Reversal'
-gsettings set org.gnome.desktop.wm.preferences theme 'Reversal'
-gsettings set org.gnome.desktop.interface icon-theme 'Reversal'
+# Установка темы
+gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
 gsettings set org.gnome.desktop.interface cursor-theme 'Adwaita'
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 
 # Кнопки окон слева (как в macOS)
 gsettings set org.gnome.desktop.wm.preferences button-layout 'close,minimize,maximize:'
 
-# Настройка Dash to Dock (Dock внизу как в macOS)
+# Настройка Dash to Dock (встроенное расширение)
 gsettings set org.gnome.shell.extensions.dash-to-dock dock-position 'BOTTOM'
 gsettings set org.gnome.shell.extensions.dash-to-dock extend-height false
 gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false
@@ -58,62 +57,38 @@ gsettings set org.gnome.desktop.interface enable-animations true
 gsettings set org.gnome.mutter center-new-windows true
 gsettings set org.gnome.mutter attach-modal-dialogs true
 
-# Включение расширений
-gnome-extensions enable dash-to-dock@micxgx.gmail.com
-gnome-extensions enable user-theme@gnome-shell-extensions.gcampax.github.com
-gnome-extensions enable appindicatorsupport@rgcjonas.gmail.com
-gnome-extensions enable bluetooth-battery-meter@maniacx.github.com
-gnome-extensions enable privacy-menu@stuarthayhurst
-gnome-extensions enable Vitals@CoreCoding.com
-gnome-extensions enable clipboard-indicator@tudmotu.com
-gnome-extensions enable ding@rastersoft.com
-gnome-extensions enable kimpanel@kde.org
-gnome-extensions enable mediacontrols@cliffniff.github.com
-gnome-extensions enable openbar@neuromorph
-gnome-extensions enable weatheroclock@CleoMenezesJr.github.io
-gnome-extensions enable whoami@megh.sh
+# Включение встроенных расширений
+gnome-extensions enable dash-to-dock@micxgx.gmail.com || true
+gnome-extensions enable user-theme@gnome-shell-extensions.gcampax.github.com || true
+gnome-extensions enable appindicatorsupport@rgcjonas.gmail.com || true
 
-# Установка Blur My Shell (если еще не установлено)
-if ! gnome-extensions list | grep -q "blur-my-shell"; then
-    echo "📦 Установка Blur My Shell..."
-    cd /tmp
-    git clone https://github.com/aunetx/blur-my-shell
+# Установка Blur My Shell
+echo "📦 Установка Blur My Shell..."
+cd /tmp
+git clone https://github.com/aunetx/blur-my-shell 2>/dev/null || true
+if [ -d "blur-my-shell" ]; then
     cd blur-my-shell
-    make install
+    make install 2>/dev/null || true
     cd ..
     rm -rf blur-my-shell
 fi
 
 # Включение Blur My Shell
-gnome-extensions enable blur-my-shell@aunetx.github.io || echo "⚠️  Blur My Shell будет доступен после перезагрузки"
+gnome-extensions enable blur-my-shell@aunetx.github.io 2>/dev/null || true
 
-# Настройка Blur My Shell (если установлено)
-if gnome-extensions list | grep -q "blur-my-shell"; then
-    echo "🎨 Настройка Blur My Shell..."
-    
-    # Включить blur для всех компонентов
-    gsettings set org.gnome.shell.extensions.blur-my-shell.panel blur true
-    gsettings set org.gnome.shell.extensions.blur-my-shell.panel brightness 0.6
-    gsettings set org.gnome.shell.extensions.blur-my-shell.panel sigma 30
-    
-    gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock blur true
-    gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock brightness 0.6
-    gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock sigma 30
-    gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock static-blur true
-    gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock style-dash-to-dock 0
-    
-    gsettings set org.gnome.shell.extensions.blur-my-shell.overview blur true
-    gsettings set org.gnome.shell.extensions.blur-my-shell.overview brightness 0.6
-    gsettings set org.gnome.shell.extensions.blur-my-shell.overview sigma 30
-    
-    gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder blur true
-    gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder brightness 0.6
-    gsettings set org.gnome.shell.extensions.blur-my-shell.appfolder sigma 30
-    
-    gsettings set org.gnome.shell.extensions.blur-my-shell.window-list blur true
-    gsettings set org.gnome.shell.extensions.blur-my-shell.window-list brightness 0.6
-    gsettings set org.gnome.shell.extensions.blur-my-shell.window-list sigma 30
-fi
+# Настройка Blur My Shell
+echo "🎨 Настройка прозрачности и blur эффектов..."
+gsettings set org.gnome.shell.extensions.blur-my-shell.panel blur true 2>/dev/null || true
+gsettings set org.gnome.shell.extensions.blur-my-shell.panel brightness 0.6 2>/dev/null || true
+gsettings set org.gnome.shell.extensions.blur-my-shell.panel sigma 30 2>/dev/null || true
+
+gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock blur true 2>/dev/null || true
+gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock brightness 0.6 2>/dev/null || true
+gsettings set org.gnome.shell.extensions.blur-my-shell.dash-to-dock sigma 30 2>/dev/null || true
+
+gsettings set org.gnome.shell.extensions.blur-my-shell.overview blur true 2>/dev/null || true
+gsettings set org.gnome.shell.extensions.blur-my-shell.overview brightness 0.6 2>/dev/null || true
+gsettings set org.gnome.shell.extensions.blur-my-shell.overview sigma 30 2>/dev/null || true
 
 # Настройка файлового менеджера (Nautilus как Finder)
 gsettings set org.gnome.nautilus.preferences default-folder-viewer 'list-view'
@@ -121,12 +96,14 @@ gsettings set org.gnome.nautilus.preferences show-hidden-files false
 gsettings set org.gnome.nautilus.list-view use-tree-view true
 
 # Настройка терминала с прозрачностью
-PROFILE=$(gsettings get org.gnome.Terminal.ProfilesList default | tr -d "'")
-gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$PROFILE/ use-transparent-background true
-gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$PROFILE/ background-transparency-percent 10
-gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$PROFILE/ use-theme-colors false
-gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$PROFILE/ background-color '#1e1e2e'
-gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$PROFILE/ foreground-color '#cdd6f4'
+PROFILE=$(gsettings get org.gnome.Terminal.ProfilesList default 2>/dev/null | tr -d "'")
+if [ -n "$PROFILE" ]; then
+    gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$PROFILE/ use-transparent-background true
+    gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$PROFILE/ background-transparency-percent 10
+    gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$PROFILE/ use-theme-colors false
+    gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$PROFILE/ background-color '#1e1e2e'
+    gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$PROFILE/ foreground-color '#cdd6f4'
+fi
 
 echo "✅ Настройка завершена!"
 echo ""
@@ -136,13 +113,6 @@ echo "Установленные расширения:"
 echo "  ✓ Dash to Dock - док панель внизу"
 echo "  ✓ Blur My Shell - эффект размытия"
 echo "  ✓ AppIndicator - индикаторы приложений"
-echo "  ✓ Bluetooth Battery - уровень батареи Bluetooth"
-echo "  ✓ Privacy Menu - быстрый доступ к настройкам приватности"
-echo "  ✓ Vitals - мониторинг системы"
-echo "  ✓ Clipboard Indicator - история буфера обмена"
-echo "  ✓ Media Controls - управление медиа"
-echo "  ✓ Weather O'Clock - погода и часы"
-echo "  ✓ WhoAmI - информация о пользователе"
 echo ""
 echo "Горячие клавиши:"
 echo "  Super - Activities (Launchpad)"
@@ -153,7 +123,11 @@ echo "  Super+D - Показать рабочий стол"
 echo "  Super+Tab - Переключение окон"
 echo "  Ctrl+←/→ - Переключение рабочих столов"
 echo ""
-echo "⚠️  Если некоторые расширения не работают, перезагрузите систему"
+echo "Дополнительные расширения можно установить через:"
+echo "  https://extensions.gnome.org"
+echo ""
+echo "⚠️  Перезагрузите систему для применения всех изменений"
+
 
 
 
