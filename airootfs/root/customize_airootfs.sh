@@ -3,11 +3,11 @@
 
 set -e -u
 
-# Включение служб
-systemctl enable NetworkManager
-systemctl enable sddm
-systemctl enable bluetooth
-systemctl enable cups
+# Включение служб (игнорируем ошибки если сервис не существует)
+systemctl enable NetworkManager || true
+systemctl enable sddm || true
+systemctl enable bluetooth || true
+systemctl enable cups || true
 
 # Настройка SDDM
 mkdir -p /etc/sddm.conf.d
@@ -36,13 +36,15 @@ makepkg -si --noconfirm
 EOFYAY
 
 # Установка пакетов из AUR
-sudo -u builder yay -S --noconfirm --removemake --cleanafter \
-    latte-dock \
-    calamares
+echo "📦 Установка Latte Dock..."
+sudo -u builder yay -S --noconfirm --removemake --cleanafter latte-dock || echo "⚠️  Latte Dock не установлен"
+
+echo "📦 Установка Calamares..."
+sudo -u builder yay -S --noconfirm --removemake --cleanafter calamares || echo "⚠️  Calamares не установлен"
 
 # Очистка
 userdel -r builder 2>/dev/null || true
-rm -rf /tmp/yay-bin /tmp/yay
+rm -rf /tmp/yay-bin /tmp/yay /tmp/makepkg
 
-echo "✅ Пакеты из AUR установлены!"
+echo "✅ Кастомизация завершена!"
 
