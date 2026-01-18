@@ -17,17 +17,33 @@ network-manager-applet
 
 # GNOME
 gnome
-gnome-extra
 gdm
+dconf-editor
+file-roller
+gnome-tweaks
+gnome-sound-recorder
 
 # GNOME расширения для macOS стиля
 gnome-shell-extensions
-gnome-tweaks
+gnome-shell-extension-appindicator
+gnome-shell-extension-dash-to-dock
+gnome-shell-extension-user-theme
+gnome-shell-extension-bluetooth-battery-meter
+gnome-shell-extension-privacy-menu
+gnome-shell-extension-vitals
+gnome-shell-extension-clipboard-indicator
+gnome-shell-extension-gtk4-ding
+gnome-shell-extension-kimpanel
+gnome-shell-extension-mediacontrols
+gnome-shell-extension-openbar
+gnome-shell-extension-weatheroclock
+gnome-shell-extension-whoami-topbar
+gnome-browser-connector
 
 # Темы и иконки
 papirus-icon-theme
-arc-gtk-theme
-arc-icon-theme
+adwaita-icon-theme
+reversal-icon-theme
 
 # Шрифты
 ttf-dejavu
@@ -55,6 +71,7 @@ vim
 nano
 htop
 fastfetch
+make
 
 # Аудио
 pulseaudio
