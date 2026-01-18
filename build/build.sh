@@ -28,11 +28,8 @@ cp -r ../airootfs/* "$WORK_DIR/airootfs/" 2>/dev/null || true
 cp ../packages.x86_64 "$WORK_DIR/"
 
 # Сборка ISO
+# Сборка ISO
 echo "🔨 Сборка ISO образа..."
 mkarchiso -v -w "$WORK_DIR/work" -o ../out "$WORK_DIR"
-
-# Установка AUR пакетов в chroot
-echo "📦 Установка пакетов из AUR..."
-arch-chroot "$WORK_DIR/work/x86_64/airootfs" /root/install-aur-packages.sh
 
 echo "✅ Сборка завершена! ISO находится в директории out/"
