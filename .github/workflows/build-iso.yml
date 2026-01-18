@@ -21,7 +21,7 @@ jobs:
     - name: Update system
       run: |
         pacman -Syu --noconfirm
-        pacman -S --noconfirm archiso git
+        pacman -S --noconfirm archiso git base-devel sudo
     
     - name: Build AUR packages
       run: |
