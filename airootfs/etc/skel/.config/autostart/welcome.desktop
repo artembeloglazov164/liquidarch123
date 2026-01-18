@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Добро пожаловать в macOS Liquid Arch
+Name[en]=Welcome to macOS Liquid Arch
+Comment=Первый запуск
+Comment[en]=First run
+Exec=kdialog --title "🍎 macOS Liquid Arch" --msgbox "Добро пожаловать в macOS Liquid Arch!\n\nДля установки Latte Dock и Calamares выполните:\n\ninstall-aur-extras.sh\n\nИли установите вручную:\nyay -S latte-dock calamares\n\nГорячие клавиши:\nMeta - Launchpad\nMeta+Q - Закрыть окно\nMeta+Space - Поиск\nCtrl+←/→ - Переключение рабочих столов"
+Terminal=false
+X-KDE-autostart-after=panel
+X-KDE-StartupNotify=false
+OnlyShowIn=KDE;
