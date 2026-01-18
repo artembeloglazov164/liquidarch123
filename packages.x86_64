@@ -17,20 +17,16 @@ network-manager-applet
 nm-connection-editor
 
 # KDE Plasma
-plasma-meta
-plasma-wayland-session
-kde-applications-meta
+plasma-desktop
+plasma-workspace
+plasma-nm
+plasma-pa
+kde-applications
 sddm
-sddm-kcm
-
-# Latte Dock
-latte-dock
 
 # Кастомизация
 kvantum
 kvantum-qt5
-latte-dock
-kwin-bismuth
 
 # Темы и иконки
 papirus-icon-theme
@@ -55,9 +51,6 @@ gwenview
 okular
 ark
 
-# Установщик
-calamares
-
 # Утилиты
 git
 wget
@@ -65,7 +58,7 @@ curl
 vim
 nano
 htop
-neofetch
+fastfetch
 
 # Аудио
 pipewire
