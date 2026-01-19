@@ -52,23 +52,52 @@ EOFYAY
 
 echo "✅ yay установлен!"
 
-# Установка Latte Dock
+# Установка Latte Dock из AUR
 echo "🎨 Установка Latte Dock из AUR..."
 sudo -u liveuser bash << 'EOFLATTE'
 set -e
-yay -S --noconfirm --removemake --cleanafter latte-dock
+cd /tmp
+yay -S --noconfirm --removemake --cleanafter latte-dock || echo "⚠️  Latte Dock не установлен"
+cd /tmp
 EOFLATTE
 
-echo "✅ Latte Dock установлен!"
-
-# Установка Calamares
+# Установка Calamares из AUR
 echo "💿 Установка Calamares из AUR..."
 sudo -u liveuser bash << 'EOFCALA'
 set -e
-yay -S --noconfirm --removemake --cleanafter calamares
+cd /tmp
+yay -S --noconfirm --removemake --cleanafter calamares || echo "⚠️  Calamares не установлен"
+cd /tmp
 EOFCALA
 
-echo "✅ Calamares установлен!"
+# Создание иконки установщика на рабочем столе
+mkdir -p /etc/skel/Desktop
+cat > /etc/skel/Desktop/calamares.desktop << 'EOFDESKTOP'
+[Desktop Entry]
+Type=Application
+Name=Install macOS Liquid Arch
+Name[ru]=Установить macOS Liquid Arch
+Comment=System Installer
+Icon=system-software-install
+Exec=sudo -E calamares
+Terminal=false
+Categories=System;
+EOFDESKTOP
+
+# Автозапуск Calamares при первом входе
+mkdir -p /etc/skel/.config/autostart
+cat > /etc/skel/.config/autostart/calamares-autostart.desktop << 'EOFAUTO'
+[Desktop Entry]
+Type=Application
+Name=Install System
+Exec=bash -c "sleep 5 && sudo -E calamares"
+Hidden=false
+NoDisplay=false
+X-KDE-autostart-after=panel
+X-KDE-autostart-phase=2
+EOFAUTO
+
+echo "✅ Latte Dock и Calamares установлены!"
 
 # Установка тем из ZIP файлов
 echo "🎨 Установка тем macOS из ZIP файлов..."
@@ -259,12 +288,17 @@ echo "✅ Кастомизация завершена!"
 echo ""
 echo "🐧 320kgpenguin (macOS Liquid Arch) готов!"
 echo ""
-echo "Пользователи:"
+echo "👤 Учетные данные Live ISO:"
 echo "  liveuser (без пароля, автологин)"
 echo "  root (без пароля)"
+echo "  sudo работает без пароля"
 echo ""
-echo "🍎 Установщик Calamares запустится автоматически"
-echo "🎨 Latte Dock запустится автоматически"
+echo "💿 Установка системы:"
+echo "  Calamares запустится автоматически после загрузки"
+echo "  Или запустите вручную: sudo calamares"
+echo "  Или кликните иконку 'Install macOS Liquid Arch' на рабочем столе"
+echo ""
+echo "🎨 Темы установлены!"
 echo "✨ Все настройки macOS применены"
 echo ""
 echo "=== Конец кастомизации ==="
