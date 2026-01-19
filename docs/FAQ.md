@@ -258,6 +258,49 @@ sudo pacman -S docker docker-compose
 
 Да, все популярные языки и инструменты доступны через pacman или AUR.
 
+## Сборка ISO
+
+### Как собрать ISO самостоятельно?
+
+**Способ 1: GitHub Actions (легко)**
+- Fork репозитория
+- Push изменений
+- ISO соберется автоматически
+
+**Способ 2: В виртуальной машине (рекомендуется)**
+- См. [BUILD.md](../BUILD.md) - полная инструкция
+- См. [ARCH-VM-QUICKSTART.md](ARCH-VM-QUICKSTART.md) - быстрый старт
+
+**Способ 3: На существующем Arch Linux**
+```bash
+sudo pacman -S archiso git
+git clone https://github.com/320kgpenguin/macos-liquid-arch.git
+cd macos-liquid-arch/build
+sudo bash build.sh
+```
+
+### Сколько времени занимает сборка?
+
+- **GitHub Actions**: ~40 минут
+- **Виртуальная машина**: ~30 минут
+- **Реальный Arch**: ~20 минут
+
+### Какие требования для сборки?
+
+- **Arch Linux** (или виртуалка с Arch)
+- **Интернет** для скачивания пакетов
+- **Место на диске**: ~20 ГБ свободно
+- **RAM**: минимум 2 ГБ (рекомендуется 4 ГБ+)
+
+### Можно ли собрать на Ubuntu/Debian?
+
+Нет, требуется именно Arch Linux. Используйте виртуальную машину.
+
+### Где найти собранный ISO?
+
+- **GitHub Actions**: Artifacts или Releases
+- **Локально**: в папке `out/`
+
 ## Сообщество
 
 ### Где получить помощь?

@@ -5,6 +5,10 @@
 1. Перейдите в [Releases](https://github.com/320kgpenguin/macos-liquid-arch/releases)
 2. Скачайте последний ISO файл
 
+**Или соберите сами:**
+- [BUILD.md](BUILD.md) - полная инструкция по сборке
+- [ARCH-VM-QUICKSTART.md](docs/ARCH-VM-QUICKSTART.md) - быстрая установка Arch в VM
+
 ## 💾 Записать на USB
 
 ### Linux/macOS

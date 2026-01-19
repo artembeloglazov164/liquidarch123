@@ -87,14 +87,19 @@ sudo dd bs=4M if=320kgpenguin-*.iso of=/dev/sdX status=progress oflag=sync
 
 ## 🔨 Сборка ISO
 
-### Локально
+### 📚 Подробная инструкция
+См. [BUILD.md](BUILD.md) - полное руководство по сборке в виртуальной машине
+
+### Быстрая сборка
+
+**Локально (требуется Arch Linux):**
 ```bash
 git clone https://github.com/320kgpenguin/macos-liquid-arch.git
 cd macos-liquid-arch/build
 sudo bash build.sh
 ```
 
-### Через GitHub Actions
+**Через GitHub Actions (автоматически):**
 1. Fork репозитория
 2. Push изменений
 3. GitHub Actions соберет ISO автоматически
