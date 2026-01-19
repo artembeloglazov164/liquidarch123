@@ -4,8 +4,69 @@
 echo "🍎 Настройка фишек macOS для KDE..."
 
 # ========================================
-# ТРЕКПАД И МЫШЬ
+# ТЕМЫ MACOS
 # ========================================
+
+echo "🎨 Применение тем macOS..."
+
+# Plasma Theme: MacSonoma
+kwriteconfig5 --file plasmarc --group Theme --key name "MacSonoma"
+
+# GTK Theme: WhiteSur
+kwriteconfig5 --file kdeglobals --group General --key ColorScheme "WhiteSur"
+kwriteconfig5 --file kdeglobals --group KDE --key widgetStyle "Lightly"
+
+# Icon Theme: WhiteSur
+kwriteconfig5 --file kdeglobals --group Icons --key Theme "WhiteSur"
+
+# Cursor Theme: WhiteSur
+kwriteconfig5 --file kcminputrc --group Mouse --key cursorTheme "WhiteSur-cursors"
+
+# Application Style: Lightly
+kwriteconfig5 --file kdeglobals --group KDE --key widgetStyle "Lightly"
+
+# ========================================
+# ALBERT LAUNCHER
+# ========================================
+
+echo "🔍 Настройка Albert Launcher..."
+
+# Создание конфига Albert
+mkdir -p ~/.config/albert
+cat > ~/.config/albert/albert.conf << 'EOF'
+[General]
+hotkey=Meta+Space
+showTray=false
+terminal=konsole
+
+[org.albert.extension.applications]
+enabled=true
+
+[org.albert.extension.calculator]
+enabled=true
+
+[org.albert.extension.files]
+enabled=true
+
+[org.albert.frontend.widgetboxmodel]
+alwaysOnTop=true
+clearOnHide=true
+displayIcons=true
+hideOnFocusLoss=true
+showCentered=true
+theme=Spotlight
+EOF
+
+# Автозапуск Albert
+mkdir -p ~/.config/autostart
+cat > ~/.config/autostart/albert.desktop << 'EOF'
+[Desktop Entry]
+Type=Application
+Name=Albert
+Exec=albert
+Terminal=false
+X-KDE-autostart-after=panel
+EOF
 
 echo "🖱️  Настройка трекпада..."
 
@@ -22,13 +83,73 @@ kwriteconfig5 --file kcminputrc --group Libinput --group 1 --key TapToClick true
 kwriteconfig5 --file kwinrc --group Plugins --key touchpadgesturesEnabled true
 
 # ========================================
-# ГОРЯЧИЕ КЛАВИШИ MACOS
+# ТЕМЫ MACOS
 # ========================================
 
-echo "⌨️  Настройка горячих клавиш macOS..."
+echo "🎨 Применение тем macOS..."
 
-# Meta (Super) - Launchpad
-kwriteconfig5 --file kglobalshortcutsrc --group plasmashell --key "activate widget 3" "Meta,none,Activate Application Launcher Widget"
+# Plasma Theme: MacSonoma
+kwriteconfig5 --file plasmarc --group Theme --key name "MacSonoma"
+
+# GTK Theme: WhiteSur
+kwriteconfig5 --file kdeglobals --group General --key ColorScheme "WhiteSur"
+kwriteconfig5 --file kdeglobals --group KDE --key widgetStyle "Lightly"
+
+# Icon Theme: WhiteSur
+kwriteconfig5 --file kdeglobals --group Icons --key Theme "WhiteSur-dark"
+
+# Cursor Theme: WhiteSur
+kwriteconfig5 --file kcminputrc --group Mouse --key cursorTheme "WhiteSur-cursors"
+
+# Application Style: Lightly
+kwriteconfig5 --file kdeglobals --group KDE --key widgetStyle "Lightly"
+
+# ========================================
+# ALBERT LAUNCHER
+# ========================================
+
+echo "🔍 Настройка Albert Launcher..."
+
+# Создание конфига Albert
+mkdir -p ~/.config/albert
+cat > ~/.config/albert/albert.conf << 'EOF'
+[General]
+hotkey=Meta+Space
+showTray=false
+telemetry=false
+
+[org.albert.extension.applications]
+enabled=true
+
+[org.albert.extension.calculator]
+enabled=true
+
+[org.albert.extension.files]
+enabled=true
+
+[org.albert.frontend.widgetboxmodel]
+alwaysOnTop=true
+clearOnHide=true
+displayIcons=true
+hideOnFocusLoss=true
+showCentered=true
+theme=Spotlight
+EOF
+
+# Автозапуск Albert
+mkdir -p ~/.config/autostart
+cat > ~/.config/autostart/albert.desktop << 'EOF'
+[Desktop Entry]
+Type=Application
+Name=Albert
+Exec=albert
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+EOF
+
+# Отключить KRunner (используем Albert)
+kwriteconfig5 --file kwinrc --group ModifierOnlyShortcuts --key Meta ""
 
 # Meta+Q - закрыть окно
 kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Window Close" "Meta+Q,Alt+F4,Close Window"
@@ -46,8 +167,11 @@ kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Switch One Desktop t
 # Ctrl+Up - Mission Control (все окна)
 kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Expose" "Ctrl+Up,Ctrl+F9,Toggle Present Windows (Current desktop)"
 
-# Meta+Space - Spotlight (KRunner)
-kwriteconfig5 --file kglobalshortcutsrc --group krunner.desktop --key "_launch" "Meta+Space\tAlt+F2,Alt+Space\tAlt+F2,KRunner"
+# Meta+Space - Spotlight (Albert)
+kwriteconfig5 --file kglobalshortcutsrc --group albert --key "show" "Meta+Space,none,Show Albert"
+
+# Отключить KRunner на Meta+Space (используем Albert)
+kwriteconfig5 --file kglobalshortcutsrc --group krunner.desktop --key "_launch" "Alt+F2,Alt+Space\tAlt+F2,KRunner"
 
 # Meta+E - Dolphin (Finder)
 kwriteconfig5 --file kglobalshortcutsrc --group org.kde.dolphin.desktop --key "_launch" "Meta+E,none,Dolphin"

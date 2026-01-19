@@ -41,6 +41,7 @@ cd /tmp
 
 # Установка yay от liveuser (используем официальный метод)
 sudo -u liveuser bash << 'EOFYAY'
+set -e
 cd /tmp
 git clone https://aur.archlinux.org/yay.git
 cd yay
@@ -53,11 +54,76 @@ echo "✅ yay установлен!"
 
 # Установка Latte Dock
 echo "🎨 Установка Latte Dock из AUR..."
-sudo -u liveuser yay -S --noconfirm --removemake --cleanafter latte-dock || echo "⚠️  Latte Dock не установлен, попробуйте позже"
+sudo -u liveuser bash << 'EOFLATTE'
+set -e
+yay -S --noconfirm --removemake --cleanafter latte-dock
+EOFLATTE
+
+echo "✅ Latte Dock установлен!"
 
 # Установка Calamares
 echo "💿 Установка Calamares из AUR..."
-sudo -u liveuser yay -S --noconfirm --removemake --cleanafter calamares || echo "⚠️  Calamares не установлен, попробуйте позже"
+sudo -u liveuser bash << 'EOFCALA'
+set -e
+yay -S --noconfirm --removemake --cleanafter calamares
+EOFCALA
+
+echo "✅ Calamares установлен!"
+
+# Установка тем из ZIP файлов
+echo "🎨 Установка тем macOS из ZIP файлов..."
+if [ -d /usr/share/320kgpenguin-themes ]; then
+    chmod +x /usr/local/bin/install-themes.sh
+    sudo -u liveuser bash << 'EOFTHEMES'
+export HOME=/home/liveuser
+export USER=liveuser
+/usr/local/bin/install-themes.sh
+EOFTHEMES
+    echo "✅ Темы установлены!"
+else
+    echo "⚠️  Темы не найдены, пропускаем установку"
+fi
+
+# Установка тем macOS
+echo "🎨 Установка тем macOS..."
+
+# MacSonoma KDE theme
+sudo -u liveuser bash << 'EOFTHEME'
+set -e
+yay -S --noconfirm --removemake --cleanafter macsonoma-kde-git || echo "⚠️  MacSonoma theme пропущена"
+EOFTHEME
+
+# WhiteSur GTK theme
+sudo -u liveuser bash << 'EOFGTK'
+set -e
+yay -S --noconfirm --removemake --cleanafter whitesur-gtk-theme-git || echo "⚠️  WhiteSur GTK пропущена"
+EOFGTK
+
+# WhiteSur Icon theme
+sudo -u liveuser bash << 'EOFICON'
+set -e
+yay -S --noconfirm --removemake --cleanafter whitesur-icon-theme-git || echo "⚠️  WhiteSur Icons пропущены"
+EOFICON
+
+# WhiteSur Cursors
+sudo -u liveuser bash << 'EOFCURSOR'
+set -e
+yay -S --noconfirm --removemake --cleanafter whitesur-cursors-git || echo "⚠️  WhiteSur Cursors пропущены"
+EOFCURSOR
+
+# Albert Launcher
+sudo -u liveuser bash << 'EOFALBERT'
+set -e
+yay -S --noconfirm --removemake --cleanafter albert || echo "⚠️  Albert пропущен"
+EOFALBERT
+
+# Lightly Application Style
+sudo -u liveuser bash << 'EOFLIGHTLY'
+set -e
+yay -S --noconfirm --removemake --cleanafter lightly-qt || echo "⚠️  Lightly пропущен"
+EOFLIGHTLY
+
+echo "✅ Темы macOS установлены!"
 
 # Очистка кэша
 sudo -u liveuser yay -Sc --noconfirm || true
@@ -177,6 +243,17 @@ echo "🎨 Настройка GRUB темы..."
 chmod +x /usr/local/bin/install-grub-theme.sh
 /usr/local/bin/install-grub-theme.sh || echo "⚠️  GRUB тема не установлена"
 
+# Применение настроек macOS для liveuser
+echo "🍎 Применение настроек macOS..."
+chmod +x /usr/local/bin/setup-macos-features.sh
+
+# Запуск настройки от liveuser
+sudo -u liveuser bash << 'EOFSETUP'
+export HOME=/home/liveuser
+export USER=liveuser
+/usr/local/bin/setup-macos-features.sh
+EOFSETUP
+
 echo ""
 echo "✅ Кастомизация завершена!"
 echo ""
@@ -188,5 +265,6 @@ echo "  root (без пароля)"
 echo ""
 echo "🍎 Установщик Calamares запустится автоматически"
 echo "🎨 Latte Dock запустится автоматически"
+echo "✨ Все настройки macOS применены"
 echo ""
 echo "=== Конец кастомизации ==="
