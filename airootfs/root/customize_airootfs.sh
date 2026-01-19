@@ -52,52 +52,103 @@ EOFYAY
 
 echo "✅ yay установлен!"
 
-# Установка Latte Dock из AUR
-echo "🎨 Установка Latte Dock из AUR..."
-sudo -u liveuser bash << 'EOFLATTE'
-set -e
-cd /tmp
-yay -S --noconfirm --removemake --cleanafter latte-dock || echo "⚠️  Latte Dock не установлен"
-cd /tmp
-EOFLATTE
+# Создание скрипта для установки AUR пакетов после загрузки
+echo "📝 Создание скрипта установки AUR пакетов..."
+cat > /usr/local/bin/install-aur-packages.sh << 'EOFAUR'
+#!/bin/bash
+echo "� Установка компонентов macOS Liquid Arch"
+echo "=========================================="
+echo ""
+echo "Это установит:"
+echo "  • Latte Dock (панель внизу)"
+echo "  • Calamares (установщик системы)"
+echo "  • Темы macOS (WhiteSur, MacSonoma)"
+echo "  • Albert Launcher (Spotlight)"
+echo ""
+echo "⏱️  Время установки: ~10-15 минут"
+echo "🌐 Требуется интернет соединение"
+echo ""
+read -p "Нажмите Enter для продолжения..."
 
-# Установка Calamares из AUR
-echo "💿 Установка Calamares из AUR..."
-sudo -u liveuser bash << 'EOFCALA'
-set -e
-cd /tmp
-yay -S --noconfirm --removemake --cleanafter calamares || echo "⚠️  Calamares не установлен"
-cd /tmp
-EOFCALA
+# Установка Latte Dock
+echo ""
+echo "📦 [1/7] Установка Latte Dock..."
+yay -S --noconfirm --removemake --cleanafter latte-dock || echo "⚠️  Ошибка установки Latte Dock"
 
-# Создание иконки установщика на рабочем столе
+# Установка Calamares
+echo ""
+echo "💿 [2/7] Установка Calamares..."
+yay -S --noconfirm --removemake --cleanafter calamares || echo "⚠️  Ошибка установки Calamares"
+
+# Установка тем
+echo ""
+echo "🎨 [3/7] Установка MacSonoma theme..."
+yay -S --noconfirm --removemake --cleanafter macsonoma-kde-git || echo "⚠️  Пропущено"
+
+echo ""
+echo "🎨 [4/7] Установка WhiteSur GTK theme..."
+yay -S --noconfirm --removemake --cleanafter whitesur-gtk-theme-git || echo "⚠️  Пропущено"
+
+echo ""
+echo "🎨 [5/7] Установка WhiteSur Icons..."
+yay -S --noconfirm --removemake --cleanafter whitesur-icon-theme-git || echo "⚠️  Пропущено"
+
+echo ""
+echo "🖱️  [6/7] Установка WhiteSur Cursors..."
+yay -S --noconfirm --removemake --cleanafter whitesur-cursors-git || echo "⚠️  Пропущено"
+
+echo ""
+echo "🔍 [7/7] Установка Albert Launcher..."
+yay -S --noconfirm --removemake --cleanafter albert || echo "⚠️  Пропущено"
+
+# Очистка
+echo ""
+echo "🧹 Очистка кэша..."
+yay -Sc --noconfirm || true
+
+echo ""
+echo "=========================================="
+echo "✅ Установка завершена!"
+echo ""
+echo "Запуск Latte Dock..."
+latte-dock &
+
+echo ""
+echo "Запуск Calamares установщика..."
+sleep 2
+sudo calamares
+EOFAUR
+chmod +x /usr/local/bin/install-aur-packages.sh
+
+# Создание иконки на рабочем столе
 mkdir -p /etc/skel/Desktop
-cat > /etc/skel/Desktop/calamares.desktop << 'EOFDESKTOP'
+cat > /etc/skel/Desktop/install-system.desktop << 'EOFDESKTOP'
 [Desktop Entry]
 Type=Application
 Name=Install macOS Liquid Arch
 Name[ru]=Установить macOS Liquid Arch
-Comment=System Installer
+Comment=Install Latte Dock, Calamares and start system installer
+Comment[ru]=Установить Latte Dock, Calamares и запустить установщик системы
 Icon=system-software-install
-Exec=sudo -E calamares
+Exec=konsole --hold -e /usr/local/bin/install-aur-packages.sh
 Terminal=false
 Categories=System;
 EOFDESKTOP
 
-# Автозапуск Calamares при первом входе
+# Автозапуск установщика при первом входе
 mkdir -p /etc/skel/.config/autostart
-cat > /etc/skel/.config/autostart/calamares-autostart.desktop << 'EOFAUTO'
+cat > /etc/skel/.config/autostart/install-prompt.desktop << 'EOFAUTO'
 [Desktop Entry]
 Type=Application
-Name=Install System
-Exec=bash -c "sleep 5 && sudo -E calamares"
+Name=Install Prompt
+Exec=bash -c "sleep 10 && kdialog --title '🍎 320kgpenguin Installer' --yesno 'Добро пожаловать в 320kgpenguin (macOS Liquid Arch)!\n\nУстановить систему на компьютер?\n\nЭто установит:\n  • Latte Dock (панель внизу)\n  • Calamares (установщик системы)\n  • Темы macOS (WhiteSur, MacSonoma)\n  • Albert Launcher (Spotlight)\n\n⏱️  Время: ~10-15 минут\n🌐 Требуется интернет' && konsole --hold -e /usr/local/bin/install-aur-packages.sh"
 Hidden=false
 NoDisplay=false
 X-KDE-autostart-after=panel
 X-KDE-autostart-phase=2
 EOFAUTO
 
-echo "✅ Latte Dock и Calamares установлены!"
+echo "✅ Скрипт установки создан!"
 
 # Установка тем из ZIP файлов
 echo "🎨 Установка тем macOS из ZIP файлов..."
@@ -113,50 +164,7 @@ else
     echo "⚠️  Темы не найдены, пропускаем установку"
 fi
 
-# Установка тем macOS
-echo "🎨 Установка тем macOS..."
-
-# MacSonoma KDE theme
-sudo -u liveuser bash << 'EOFTHEME'
-set -e
-yay -S --noconfirm --removemake --cleanafter macsonoma-kde-git || echo "⚠️  MacSonoma theme пропущена"
-EOFTHEME
-
-# WhiteSur GTK theme
-sudo -u liveuser bash << 'EOFGTK'
-set -e
-yay -S --noconfirm --removemake --cleanafter whitesur-gtk-theme-git || echo "⚠️  WhiteSur GTK пропущена"
-EOFGTK
-
-# WhiteSur Icon theme
-sudo -u liveuser bash << 'EOFICON'
-set -e
-yay -S --noconfirm --removemake --cleanafter whitesur-icon-theme-git || echo "⚠️  WhiteSur Icons пропущены"
-EOFICON
-
-# WhiteSur Cursors
-sudo -u liveuser bash << 'EOFCURSOR'
-set -e
-yay -S --noconfirm --removemake --cleanafter whitesur-cursors-git || echo "⚠️  WhiteSur Cursors пропущены"
-EOFCURSOR
-
-# Albert Launcher
-sudo -u liveuser bash << 'EOFALBERT'
-set -e
-yay -S --noconfirm --removemake --cleanafter albert || echo "⚠️  Albert пропущен"
-EOFALBERT
-
-# Lightly Application Style
-sudo -u liveuser bash << 'EOFLIGHTLY'
-set -e
-yay -S --noconfirm --removemake --cleanafter lightly-qt || echo "⚠️  Lightly пропущен"
-EOFLIGHTLY
-
-echo "✅ Темы macOS установлены!"
-
-# Очистка кэша
-sudo -u liveuser yay -Sc --noconfirm || true
-rm -rf /home/liveuser/.cache/yay
+echo "✅ Базовая настройка завершена!"
 
 # Копирование конфигов для всех пользователей
 echo "📋 Копирование конфигураций..."
@@ -294,11 +302,18 @@ echo "  root (без пароля)"
 echo "  sudo работает без пароля"
 echo ""
 echo "💿 Установка системы:"
-echo "  Calamares запустится автоматически после загрузки"
-echo "  Или запустите вручную: sudo calamares"
+echo "  При первом входе появится диалог установки"
 echo "  Или кликните иконку 'Install macOS Liquid Arch' на рабочем столе"
 echo ""
-echo "🎨 Темы установлены!"
+echo "📦 Что будет установлено из AUR:"
+echo "  • Latte Dock (панель внизу)"
+echo "  • Calamares (установщик)"
+echo "  • Темы macOS (WhiteSur, MacSonoma, Albert)"
+echo ""
+echo "⏱️  Время установки: ~10-15 минут"
+echo "🌐 Требуется интернет соединение"
+echo ""
+echo "🎨 Базовые темы установлены из ZIP файлов"
 echo "✨ Все настройки macOS применены"
 echo ""
 echo "=== Конец кастомизации ==="
