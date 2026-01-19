@@ -39,15 +39,15 @@ EOF
 echo "📦 Установка yay..."
 cd /tmp
 
-# Установка yay от liveuser (используем официальный метод)
+# Установка yay-bin (бинарная версия, не требует компиляции Go)
 sudo -u liveuser bash << 'EOFYAY'
 set -e
 cd /tmp
-git clone https://aur.archlinux.org/yay.git
-cd yay
+git clone https://aur.archlinux.org/yay-bin.git
+cd yay-bin
 makepkg -si --noconfirm
 cd /tmp
-rm -rf yay
+rm -rf yay-bin
 EOFYAY
 
 echo "✅ yay установлен!"
