@@ -7,6 +7,9 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -29,7 +32,14 @@ jobs:
         chmod +x build.sh
         bash build.sh
     
-    - name: Upload ISO
+    - name: Get ISO filename
+      id: iso
+      run: |
+        ISO_FILE=$(ls out/*.iso | head -n 1)
+        echo "filename=$ISO_FILE" >> $GITHUB_OUTPUT
+        echo "basename=$(basename $ISO_FILE)" >> $GITHUB_OUTPUT
+    
+    - name: Upload ISO as Artifact
       uses: actions/upload-artifact@v4
       with:
         name: 320kgpenguin-iso
@@ -42,6 +52,31 @@ jobs:
       with:
         tag_name: v${{ github.run_number }}
         name: 320kgpenguin v${{ github.run_number }}
+        body: |
+          🐧 **320kgpenguin (macOS Liquid Arch)**
+          
+          Кастомный дистрибутив Arch Linux с дизайном macOS и эффектами жидкого стекла.
+          
+          ## 🍎 Особенности
+          - KDE Plasma с жидким стеклом
+          - Latte Dock внизу
+          - Calamares установщик
+          - Горячие клавиши macOS
+          - 4 рабочих стола
+          - Blur эффекты везде
+          
+          ## 📦 Установка
+          1. Скачайте ISO файл ниже
+          2. Запишите на USB: `sudo dd bs=4M if=*.iso of=/dev/sdX status=progress`
+          3. Загрузитесь с USB
+          4. Следуйте инструкциям Calamares
+          
+          ## 👤 Пользователи Live ISO
+          - **liveuser** (без пароля, автологин)
+          - **root** (без пароля)
+          
+          ---
+          Build #${{ github.run_number }} | Commit: ${{ github.sha }}
         files: out/*.iso
         draft: false
         prerelease: false
