@@ -301,6 +301,34 @@ sudo bash build.sh
 - **GitHub Actions**: Artifacts или Releases
 - **Локально**: в папке `out/`
 
+### Как удалить старые артефакты GitHub Actions?
+
+Артефакты занимают место в GitHub Storage. Для очистки:
+
+**Способ 1: Веб-интерфейс**
+- GitHub → Actions → выберите run → Delete workflow run
+
+**Способ 2: Автоматический скрипт**
+```bash
+bash scripts/cleanup-github-artifacts.sh
+```
+
+**Способ 3: GitHub CLI**
+```bash
+gh run list --repo 320kgpenguin/macos-liquid-arch
+gh run delete RUN_ID --repo 320kgpenguin/macos-liquid-arch
+```
+
+**Подробнее:** [GITHUB-ARTIFACTS.md](GITHUB-ARTIFACTS.md)
+
+**Примечание:** В репозитории настроена автоматическая очистка артефактов старше 7 дней.
+
+### Сколько места занимают артефакты?
+
+- **Один ISO**: ~3-4 ГБ
+- **GitHub Free**: 500 МБ storage (недостаточно!)
+- **Решение**: Используйте Releases (не занимают Actions Storage) или удаляйте старые артефакты
+
 ## Сообщество
 
 ### Где получить помощь?
