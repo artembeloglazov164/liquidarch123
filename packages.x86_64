@@ -45,7 +45,6 @@ kcalc
 kwrite
 
 # Для Latte Dock (зависимости)
-plasma-framework
 kwayland
 qt5-base
 qt5-declarative
@@ -86,7 +85,6 @@ vim
 nano
 htop
 fastfetch
-neofetch
 make
 gcc
 unzip
@@ -113,4 +111,3 @@ print-manager
 # Дополнительно
 xdg-user-dirs
 xdg-utils
-packagekit-qt5
