@@ -3,10 +3,10 @@
 
 set -e -u
 
-echo "🐧 === Начало кастомизации 320kgpenguin ==="
+echo "Начало кастомизации 320kgpenguin"
 
 # Создание пользователя liveuser
-echo "👤 Создание пользователя liveuser..."
+echo "Создание пользователя liveuser..."
 useradd -m -G wheel,audio,video,storage,optical -s /bin/bash liveuser || true
 passwd -d liveuser || true
 passwd -d root || true
@@ -14,14 +14,14 @@ passwd -d root || true
 echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 # Включение служб
-echo "⚙️  Включение служб..."
+echo "Включение служб..."
 systemctl enable NetworkManager
 systemctl enable sddm
 systemctl enable bluetooth || true
 systemctl enable cups || true
 
 # Настройка SDDM
-echo "🎨 Настройка SDDM..."
+echo "Настройка SDDM..."
 mkdir -p /etc/sddm.conf.d
 cat > /etc/sddm.conf.d/autologin.conf << 'EOF'
 [Autologin]
@@ -35,8 +35,8 @@ Current=breeze
 Numlock=on
 EOF
 
-# Установка yay и AUR пакетов
-echo "📦 Установка yay..."
+# Установка yay
+echo "Установка yay..."
 cd /tmp
 
 # Установка yay-bin (бинарная версия, не требует компиляции Go)
@@ -50,108 +50,150 @@ cd /tmp
 rm -rf yay-bin
 EOFYAY
 
-echo "✅ yay установлен!"
+echo "yay установлен!"
 
-# Создание скрипта для установки AUR пакетов после загрузки
-echo "📝 Создание скрипта установки AUR пакетов..."
-cat > /usr/local/bin/install-aur-packages.sh << 'EOFAUR'
+# Создание скрипта для установки AUR пакетов ДО запуска KDE
+echo "Создание скрипта первого запуска..."
+cat > /usr/local/bin/first-boot-setup.sh << 'EOFFIRST'
 #!/bin/bash
-echo "� Установка компонентов macOS Liquid Arch"
-echo "=========================================="
-echo ""
-echo "Это установит:"
-echo "  • Latte Dock (панель внизу)"
-echo "  • Calamares (установщик системы)"
-echo "  • Темы macOS (WhiteSur, MacSonoma)"
-echo "  • Albert Launcher (Spotlight)"
-echo ""
-echo "⏱️  Время установки: ~10-15 минут"
-echo "🌐 Требуется интернет соединение"
-echo ""
-read -p "Нажмите Enter для продолжения..."
+# Скрипт первого запуска - устанавливает AUR пакеты до загрузки KDE
 
-# Установка Latte Dock
-echo ""
-echo "📦 [1/7] Установка Latte Dock..."
-yay -S --noconfirm --removemake --cleanafter latte-dock || echo "⚠️  Ошибка установки Latte Dock"
+MARKER="/var/lib/first-boot-done"
 
-# Установка Calamares
-echo ""
-echo "💿 [2/7] Установка Calamares..."
-yay -S --noconfirm --removemake --cleanafter calamares || echo "⚠️  Ошибка установки Calamares"
+# Если уже выполнялось - пропустить
+if [ -f "$MARKER" ]; then
+    exit 0
+fi
 
-# Установка тем
+clear
+echo "================================================================"
 echo ""
-echo "🎨 [3/7] Установка MacSonoma theme..."
-yay -S --noconfirm --removemake --cleanafter macsonoma-kde-git || echo "⚠️  Пропущено"
+echo "        320kgpenguin (macOS Liquid Arch)"
+echo ""
+echo "        Первый запуск - установка компонентов"
+echo ""
+echo "================================================================"
+echo ""
+echo "Это займет ~10-15 минут. Пожалуйста, подождите..."
+echo ""
+echo "Что будет установлено:"
+echo "  - Latte Dock (панель внизу)"
+echo "  - Calamares (установщик системы)"
+echo "  - Темы macOS (WhiteSur, MacSonoma)"
+echo "  - Albert Launcher (Spotlight)"
+echo ""
+echo "Требуется интернет соединение"
+echo ""
+sleep 3
+
+# Проверка интернета
+echo "Проверка интернет соединения..."
+if ! ping -c 1 archlinux.org &> /dev/null; then
+    echo ""
+    echo "Нет интернет соединения!"
+    echo ""
+    echo "Пожалуйста:"
+    echo "  1. Подключитесь к интернету"
+    echo "  2. Перезагрузите систему"
+    echo ""
+    read -p "Нажмите Enter для продолжения без установки..."
+    touch "$MARKER"
+    exit 0
+fi
+echo "Интернет доступен"
+echo ""
+
+# Функция установки с обработкой ошибок
+install_package() {
+    local name=$1
+    local package=$2
+    echo ""
+    echo "----------------------------------------------------------------"
+    echo "Установка: $name"
+    echo "----------------------------------------------------------------"
+    if sudo -u liveuser yay -S --noconfirm --removemake --cleanafter "$package" 2>&1 | tee /tmp/install-$package.log; then
+        echo "OK: $name установлен"
+    else
+        echo "WARN: Ошибка установки $name (пропущено)"
+    fi
+}
+
+# Установка пакетов
+install_package "Latte Dock" "latte-dock"
+install_package "Calamares" "calamares"
+install_package "MacSonoma Theme" "macsonoma-kde-git"
+install_package "WhiteSur GTK Theme" "whitesur-gtk-theme-git"
+install_package "WhiteSur Icons" "whitesur-icon-theme-git"
+install_package "WhiteSur Cursors" "whitesur-cursors-git"
+install_package "Albert Launcher" "albert"
+
+# Очистка кэша
+echo ""
+echo "----------------------------------------------------------------"
+echo "Очистка кэша..."
+echo "----------------------------------------------------------------"
+sudo -u liveuser yay -Sc --noconfirm || true
+rm -rf /home/liveuser/.cache/yay
+
+# Отметка о выполнении
+touch "$MARKER"
 
 echo ""
-echo "🎨 [4/7] Установка WhiteSur GTK theme..."
-yay -S --noconfirm --removemake --cleanafter whitesur-gtk-theme-git || echo "⚠️  Пропущено"
-
+echo "================================================================"
 echo ""
-echo "🎨 [5/7] Установка WhiteSur Icons..."
-yay -S --noconfirm --removemake --cleanafter whitesur-icon-theme-git || echo "⚠️  Пропущено"
-
+echo "        Установка завершена!"
 echo ""
-echo "🖱️  [6/7] Установка WhiteSur Cursors..."
-yay -S --noconfirm --removemake --cleanafter whitesur-cursors-git || echo "⚠️  Пропущено"
-
+echo "        Запуск KDE Plasma через 5 секунд..."
 echo ""
-echo "🔍 [7/7] Установка Albert Launcher..."
-yay -S --noconfirm --removemake --cleanafter albert || echo "⚠️  Пропущено"
-
-# Очистка
+echo "================================================================"
 echo ""
-echo "🧹 Очистка кэша..."
-yay -Sc --noconfirm || true
+sleep 5
 
-echo ""
-echo "=========================================="
-echo "✅ Установка завершена!"
-echo ""
-echo "Запуск Latte Dock..."
-latte-dock &
+EOFFIRST
+chmod +x /usr/local/bin/first-boot-setup.sh
 
-echo ""
-echo "Запуск Calamares установщика..."
-sleep 2
-sudo calamares
-EOFAUR
-chmod +x /usr/local/bin/install-aur-packages.sh
+# Создание systemd service для запуска перед SDDM
+cat > /etc/systemd/system/first-boot-setup.service << 'EOFSERVICE'
+[Unit]
+Description=First Boot Setup - Install AUR packages
+Before=display-manager.service
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=!/var/lib/first-boot-done
 
-# Создание иконки на рабочем столе
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/first-boot-setup.sh
+StandardInput=tty
+StandardOutput=tty
+TTYPath=/dev/tty1
+TTYReset=yes
+TTYVHangup=yes
+
+[Install]
+WantedBy=multi-user.target
+EOFSERVICE
+
+# Включение сервиса
+systemctl enable first-boot-setup.service
+
+# Создание иконки на рабочем столе для запуска Calamares
 mkdir -p /etc/skel/Desktop
 cat > /etc/skel/Desktop/install-system.desktop << 'EOFDESKTOP'
 [Desktop Entry]
 Type=Application
 Name=Install macOS Liquid Arch
-Name[ru]=Установить macOS Liquid Arch
-Comment=Install Latte Dock, Calamares and start system installer
-Comment[ru]=Установить Latte Dock, Calamares и запустить установщик системы
+Comment=Install system to disk
 Icon=system-software-install
-Exec=konsole --hold -e /usr/local/bin/install-aur-packages.sh
+Exec=sudo calamares
 Terminal=false
 Categories=System;
 EOFDESKTOP
 
-# Автозапуск установщика при первом входе
-mkdir -p /etc/skel/.config/autostart
-cat > /etc/skel/.config/autostart/install-prompt.desktop << 'EOFAUTO'
-[Desktop Entry]
-Type=Application
-Name=Install Prompt
-Exec=bash -c "sleep 10 && kdialog --title '🍎 320kgpenguin Installer' --yesno 'Добро пожаловать в 320kgpenguin (macOS Liquid Arch)!\n\nУстановить систему на компьютер?\n\nЭто установит:\n  • Latte Dock (панель внизу)\n  • Calamares (установщик системы)\n  • Темы macOS (WhiteSur, MacSonoma)\n  • Albert Launcher (Spotlight)\n\n⏱️  Время: ~10-15 минут\n🌐 Требуется интернет' && konsole --hold -e /usr/local/bin/install-aur-packages.sh"
-Hidden=false
-NoDisplay=false
-X-KDE-autostart-after=panel
-X-KDE-autostart-phase=2
-EOFAUTO
-
-echo "✅ Скрипт установки создан!"
+echo "Сервис первого запуска создан!"
 
 # Установка тем из ZIP файлов
-echo "🎨 Установка тем macOS из ZIP файлов..."
+echo "Установка тем macOS из ZIP файлов..."
 if [ -d /usr/share/320kgpenguin-themes ]; then
     chmod +x /usr/local/bin/install-themes.sh
     sudo -u liveuser bash << 'EOFTHEMES'
@@ -159,21 +201,21 @@ export HOME=/home/liveuser
 export USER=liveuser
 /usr/local/bin/install-themes.sh
 EOFTHEMES
-    echo "✅ Темы установлены!"
+    echo "Темы установлены!"
 else
-    echo "⚠️  Темы не найдены, пропускаем установку"
+    echo "Темы не найдены, пропускаем установку"
 fi
 
-echo "✅ Базовая настройка завершена!"
+echo "Базовая настройка завершена!"
 
 # Копирование конфигов для всех пользователей
-echo "📋 Копирование конфигураций..."
+echo "Копирование конфигураций..."
 cp -r /etc/skel/.config /home/liveuser/ 2>/dev/null || true
 cp -r /etc/skel/.local /home/liveuser/ 2>/dev/null || true
 chown -R liveuser:liveuser /home/liveuser 2>/dev/null || true
 
 # Настройка fastfetch
-echo "🖥️  Настройка fastfetch..."
+echo "Настройка fastfetch..."
 mkdir -p /etc/skel/.config/fastfetch
 cat > /etc/skel/.config/fastfetch/config.jsonc << 'EOF'
 {
@@ -190,7 +232,7 @@ cat > /etc/skel/.config/fastfetch/config.jsonc << 'EOF'
     "modules": [
         {
             "type": "custom",
-            "format": "🐧 320kgpenguin (macOS Liquid Arch)"
+            "format": "320kgpenguin (macOS Liquid Arch)"
         },
         "break",
         {
@@ -276,12 +318,12 @@ cp /etc/skel/.config/fastfetch /home/liveuser/.config/ -r 2>/dev/null || true
 chown -R liveuser:liveuser /home/liveuser/.config/fastfetch 2>/dev/null || true
 
 # Установка GRUB темы
-echo "🎨 Настройка GRUB темы..."
+echo "Настройка GRUB темы..."
 chmod +x /usr/local/bin/install-grub-theme.sh
-/usr/local/bin/install-grub-theme.sh || echo "⚠️  GRUB тема не установлена"
+/usr/local/bin/install-grub-theme.sh || echo "GRUB тема не установлена"
 
 # Применение настроек macOS для liveuser
-echo "🍎 Применение настроек macOS..."
+echo "Применение настроек macOS..."
 chmod +x /usr/local/bin/setup-macos-features.sh
 
 # Запуск настройки от liveuser
@@ -292,28 +334,27 @@ export USER=liveuser
 EOFSETUP
 
 echo ""
-echo "✅ Кастомизация завершена!"
+echo "Кастомизация завершена!"
 echo ""
-echo "🐧 320kgpenguin (macOS Liquid Arch) готов!"
+echo "320kgpenguin (macOS Liquid Arch) готов!"
 echo ""
-echo "👤 Учетные данные Live ISO:"
+echo "Учетные данные Live ISO:"
 echo "  liveuser (без пароля, автологин)"
 echo "  root (без пароля)"
 echo "  sudo работает без пароля"
 echo ""
-echo "💿 Установка системы:"
-echo "  При первом входе появится диалог установки"
-echo "  Или кликните иконку 'Install macOS Liquid Arch' на рабочем столе"
+echo "Первый запуск:"
+echo "  AUR пакеты установятся автоматически ДО загрузки KDE"
+echo "  Это займет ~10-15 минут"
+echo "  После установки KDE запустится автоматически"
 echo ""
-echo "📦 Что будет установлено из AUR:"
-echo "  • Latte Dock (панель внизу)"
-echo "  • Calamares (установщик)"
-echo "  • Темы macOS (WhiteSur, MacSonoma, Albert)"
+echo "Что будет установлено из AUR:"
+echo "  - Latte Dock (панель внизу)"
+echo "  - Calamares (установщик)"
+echo "  - Темы macOS (WhiteSur, MacSonoma, Albert)"
 echo ""
-echo "⏱️  Время установки: ~10-15 минут"
-echo "🌐 Требуется интернет соединение"
-echo ""
-echo "🎨 Базовые темы установлены из ZIP файлов"
-echo "✨ Все настройки macOS применены"
+echo "Требуется интернет соединение при первом запуске"
+echo "Базовые темы установлены из ZIP файлов"
+echo "Все настройки macOS применены"
 echo ""
 echo "=== Конец кастомизации ==="
