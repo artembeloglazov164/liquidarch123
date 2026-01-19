@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  # LITE режим - AUR пакеты устанавливаются при первом запуске
+  archiso-builder:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BUILD_MODE: lite
+    container_name: 320kgpenguin-builder-lite
+    privileged: true
+    volumes:
+      - .:/build
+      - pacman-cache:/var/cache/pacman/pkg
+      - ./out:/build/out
+    environment:
+      - TERM=xterm-256color
+    stdin_open: true
+    tty: true
+
+  # FULL режим - все устанавливается во время сборки ISO
+  archiso-builder-full:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BUILD_MODE: full
+    container_name: 320kgpenguin-builder-full
+    privileged: true
+    volumes:
+      - .:/build
+      - pacman-cache:/var/cache/pacman/pkg
+      - ./out:/build/out
+    environment:
+      - TERM=xterm-256color
+    stdin_open: true
+    tty: true
+
+volumes:
+  pacman-cache:
+    driver: local

@@ -259,16 +259,26 @@ sudo pacman -S docker docker-compose
 
 ### Как собрать ISO самостоятельно?
 
-**Способ 1: GitHub Actions (легко)**
+**Способ 1: Docker (рекомендуется)**
+```bash
+# Windows
+.\scripts\docker-build.ps1
+
+# Linux/macOS
+bash scripts/docker-build.sh
+```
+См. [DOCKER-BUILD.md](DOCKER-BUILD.md)
+
+**Способ 2: GitHub Actions (легко)**
 - Fork репозитория
 - Push изменений
 - ISO соберется автоматически
 
-**Способ 2: В виртуальной машине (рекомендуется)**
+**Способ 3: В виртуальной машине**
 - См. [BUILD.md](../BUILD.md) - полная инструкция
 - См. [ARCH-VM-QUICKSTART.md](ARCH-VM-QUICKSTART.md) - быстрый старт
 
-**Способ 3: На существующем Arch Linux**
+**Способ 4: На существующем Arch Linux**
 ```bash
 sudo pacman -S archiso git
 git clone https://github.com/320kgpenguin/macos-liquid-arch.git
@@ -278,6 +288,7 @@ sudo bash build.sh
 
 ### Сколько времени занимает сборка?
 
+- **Docker**: ~30 минут (первая сборка), ~20 минут (с кэшем)
 - **GitHub Actions**: ~40 минут
 - **Виртуальная машина**: ~30 минут
 - **Реальный Arch**: ~20 минут
@@ -291,7 +302,10 @@ sudo bash build.sh
 
 ### Можно ли собрать на Ubuntu/Debian?
 
-Нет, требуется именно Arch Linux. Используйте виртуальную машину.
+Нет, требуется именно Arch Linux. Используйте:
+- **Docker** (рекомендуется) - работает на любой ОС
+- **Виртуальную машину** с Arch Linux
+- **GitHub Actions** - автоматическая сборка
 
 ### Где найти собранный ISO?
 

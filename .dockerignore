@@ -1,0 +1,37 @@
+# Git
+.git
+.gitignore
+.github
+
+# Build artifacts
+build/work
+build/out
+out
+
+# Documentation
+*.md
+docs/
+!BUILD.md
+
+# Scripts (копируются отдельно)
+scripts/
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp

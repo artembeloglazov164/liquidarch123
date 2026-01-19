@@ -6,6 +6,7 @@
 2. Скачайте последний ISO файл
 
 **Или соберите сами:**
+- [DOCKER-BUILD.md](docs/DOCKER-BUILD.md) - сборка в Docker (рекомендуется)
 - [BUILD.md](BUILD.md) - полная инструкция по сборке
 - [ARCH-VM-QUICKSTART.md](docs/ARCH-VM-QUICKSTART.md) - быстрая установка Arch в VM
 
