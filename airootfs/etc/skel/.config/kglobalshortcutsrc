@@ -1,0 +1,20 @@
+[kwin]
+Expose=Ctrl+Up,Ctrl+F9,Toggle Present Windows (Current desktop)
+ExposeAll=Ctrl+F10\tLaunch (C),Ctrl+F10\tLaunch (C),Toggle Present Windows (All desktops)
+Switch One Desktop to the Left=Ctrl+Left,Meta+Ctrl+Left,Switch One Desktop to the Left
+Switch One Desktop to the Right=Ctrl+Right,Meta+Ctrl+Right,Switch One Desktop to the Right
+Walk Through Windows=Meta+Tab,Alt+Tab,Walk Through Windows
+Walk Through Windows (Reverse)=Meta+Shift+Tab,Alt+Shift+Backtab,Walk Through Windows (Reverse)
+Window Close=Meta+Q,Alt+F4,Close Window
+Window Maximize=Meta+PgUp,Meta+PgUp,Maximize Window
+Window Minimize=Meta+M,Meta+PgDown,Minimize Window
+
+[plasmashell]
+activate widget 3=Meta+Space,none,Activate Application Launcher Widget
+show dashboard=none,Ctrl+F12,Show Desktop
+
+[org.kde.dolphin.desktop]
+_launch=Meta+E,none,Dolphin
+
+[org.kde.konsole.desktop]
+_launch=Meta+T,none,Konsole

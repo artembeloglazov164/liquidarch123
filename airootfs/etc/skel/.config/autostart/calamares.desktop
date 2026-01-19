@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Install 320kgpenguin
+Comment=Calamares — System Installer
+Icon=calamares
+Exec=sudo calamares
+Terminal=false
+Categories=System;
+X-KDE-autostart-after=panel

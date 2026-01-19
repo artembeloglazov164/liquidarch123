@@ -1,6 +1,6 @@
 [Appearance]
 ColorScheme=macOS-Liquid
-Font=SF Mono,12,-1,5,50,0,0,0,0,0
+Font=Hack,12,-1,5,50,0,0,0,0,0
 
 [General]
 Name=macOS-Liquid

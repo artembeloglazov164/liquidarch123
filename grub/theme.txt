@@ -1,4 +1,4 @@
-# macOS Liquid GRUB Theme
+# 320kgpenguin macOS Liquid Glass GRUB Theme
 
 title-text: ""
 desktop-image: "background.png"
@@ -27,7 +27,7 @@ terminal-box: "terminal_box_*.png"
   left = 0
   width = 100%
   height = 20
-  text = "🍎 macOS Liquid Arch"
+  text = "🐧 320kgpenguin - macOS Liquid Arch"
   color = "#cdd6f4"
   font = "SF Pro Display Regular 18"
   align = "center"

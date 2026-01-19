@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Установить систему
+Name[en]=Install System
+Comment=Установка macOS Liquid Arch на диск
+Comment[en]=Install macOS Liquid Arch to disk
+Icon=system-software-install
+Exec=gnome-terminal -- sudo /usr/local/bin/install-system.sh
+Terminal=false
+Categories=System;

@@ -1,4 +1,4 @@
-name: Build ISO
+name: Build 320kgpenguin ISO
 
 on:
   push:
@@ -18,10 +18,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     
-    - name: Update system
+    - name: Update system and install dependencies
       run: |
         pacman -Syu --noconfirm
-        pacman -S --noconfirm archiso git
+        pacman -S --noconfirm archiso git base-devel sudo
     
     - name: Build ISO
       run: |
@@ -32,6 +32,18 @@ jobs:
     - name: Upload ISO
       uses: actions/upload-artifact@v4
       with:
-        name: macos-liquid-arch-iso
+        name: 320kgpenguin-iso
         path: out/*.iso
         retention-days: 30
+    
+    - name: Create Release
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ github.run_number }}
+        name: 320kgpenguin v${{ github.run_number }}
+        files: out/*.iso
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

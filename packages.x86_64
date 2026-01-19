@@ -17,23 +17,47 @@ syslinux
 # Сеть
 networkmanager
 network-manager-applet
+nm-connection-editor
 
-# GNOME
-gnome
-gdm
-dconf-editor
-file-roller
-gnome-tweaks
-gnome-sound-recorder
+# KDE Plasma
+plasma-desktop
+plasma-workspace
+plasma-nm
+plasma-pa
+kscreen
+kinfocenter
+powerdevil
+bluedevil
+kde-gtk-config
+breeze-gtk
+sddm
+sddm-kcm
 
-# GNOME расширения для macOS стиля
-gnome-shell-extensions
-gnome-shell-extension-appindicator
-gnome-browser-connector
+# KDE приложения
+dolphin
+konsole
+kate
+spectacle
+gwenview
+okular
+ark
+kcalc
+kwrite
 
-# Темы и иконки
+# Для Latte Dock (зависимости)
+plasma-framework
+kwayland
+qt5-base
+qt5-declarative
+qt5-x11extras
+cmake
+extra-cmake-modules
+
+# Темы и кастомизация
+kvantum
 papirus-icon-theme
-adwaita-icon-theme
+breeze
+breeze-gtk
 
 # Шрифты
 ttf-dejavu
@@ -42,16 +66,17 @@ noto-fonts
 noto-fonts-emoji
 ttf-roboto
 ttf-opensans
+ttf-hack
 
 # Приложения
 firefox
-nautilus
-gnome-terminal
-gnome-text-editor
-gnome-screenshot
-eog
-evince
-file-roller
+chromium
+libreoffice-fresh
+gimp
+vlc
+telegram-desktop
+discord
+obs-studio
 
 # Утилиты
 git
@@ -61,12 +86,20 @@ vim
 nano
 htop
 fastfetch
+neofetch
 make
+gcc
+unzip
+zip
+p7zip
+rsync
 
 # Аудио
-pulseaudio
-pulseaudio-alsa
-pulseaudio-bluetooth
+pipewire
+pipewire-alsa
+pipewire-pulse
+pipewire-jack
+wireplumber
 pavucontrol
 
 # Bluetooth
@@ -75,7 +108,9 @@ bluez-utils
 
 # Принтеры
 cups
+print-manager
 
 # Дополнительно
 xdg-user-dirs
 xdg-utils
+packagekit-qt5

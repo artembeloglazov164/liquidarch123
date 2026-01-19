@@ -1,0 +1,25 @@
+[PlasmaViews][Panel 2]
+alignment=10
+floating=1
+panelSize=100
+panelTransparency=90
+screenEdgeMargin=8
+
+[PlasmaViews][Panel 2][Defaults]
+thickness=56
+
+[UniversalSettings]
+badges3DStyle=true
+canDisableBorders=true
+currentLayout=macOS-Liquid
+inAdvancedModeForEditSettings=true
+isAvailableGeometryBroadcastedToPlasma=true
+launchers=applications:org.kde.dolphin.desktop,applications:firefox.desktop,applications:org.kde.konsole.desktop,applications:org.kde.kate.desktop,applications:systemsettings.desktop
+metaPressAndHoldEnabled=false
+mouseSensitivity=2
+parabolicEffect=2
+parabolicSpread=3
+screenTracking=true
+showInfoWindow=true
+singleModeLayoutName=macOS-Liquid
+version=2
