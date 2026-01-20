@@ -39,13 +39,18 @@ EOF
 echo "Установка yay..."
 cd /tmp
 
+# Исправление для работы в chroot
+export PKGDEST=/tmp/packages
+mkdir -p /tmp/packages
+
 # Установка yay-bin (бинарная версия, не требует компиляции Go)
 sudo -u liveuser bash << 'EOFYAY'
 set -e
+export PKGDEST=/tmp/packages
 cd /tmp
 git clone https://aur.archlinux.org/yay-bin.git
 cd yay-bin
-makepkg -si --noconfirm
+makepkg -si --noconfirm --skippgpcheck
 cd /tmp
 rm -rf yay-bin
 EOFYAY

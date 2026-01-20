@@ -40,16 +40,21 @@ EOF
 echo "Установка yay..."
 cd /tmp
 
+# Исправление для работы в chroot
+export PKGDEST=/tmp/packages
+mkdir -p /tmp/packages
+
 # Очистка перед установкой
 pacman -Scc --noconfirm || true
 rm -rf /var/cache/pacman/pkg/* || true
 
 sudo -u liveuser bash << 'EOFYAY'
 set -e
+export PKGDEST=/tmp/packages
 cd /tmp
 git clone https://aur.archlinux.org/yay-bin.git
 cd yay-bin
-makepkg -si --noconfirm
+makepkg -si --noconfirm --skippgpcheck
 cd /tmp
 rm -rf yay-bin
 EOFYAY

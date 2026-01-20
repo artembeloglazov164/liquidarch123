@@ -11,11 +11,17 @@ RUN pacman -Syu --noconfirm && \
     git \
     base-devel \
     sudo \
+    fakeroot \
     && pacman -Scc --noconfirm
 
 # Создание пользователя builder
 RUN useradd -m -G wheel -s /bin/bash builder && \
     echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+# Исправление для makepkg в Docker
+RUN echo "PKGDEST=/tmp/packages" >> /etc/makepkg.conf && \
+    mkdir -p /tmp/packages && \
+    chown builder:builder /tmp/packages
 
 # Рабочая директория
 WORKDIR /build
