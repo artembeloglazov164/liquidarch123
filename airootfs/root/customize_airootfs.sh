@@ -99,26 +99,118 @@ fi
 echo "Интернет доступен"
 echo ""
 
-# Функция установки с обработкой ошибок
+# Функция установки с обработкой ошибок и проверкой
 install_package() {
     local name=$1
     local package=$2
+    local optional=${3:-false}
+    
     echo ""
     echo "----------------------------------------------------------------"
     echo "Установка: $name"
     echo "----------------------------------------------------------------"
-    if sudo -u liveuser yay -S --noconfirm --removemake --cleanafter "$package" 2>&1 | tee /tmp/install-$package.log; then
+    
+    # Проверка, не установлен ли уже пакет
+    if pacman -Qi "$package" &>/dev/null || pacman -Qi "${package%-git}" &>/dev/null; then
+        echo "OK: $name уже установлен"
+        return 0
+    fi
+    
+    # Попытка установки с разрешением зависимостей
+    if sudo -u liveuser yay -S --noconfirm --needed --removemake --cleanafter --answerdiff=None --answerclean=None --mflags "--nocheck --skippgpcheck" "$package" 2>&1 | tee /tmp/install-$package.log; then
         echo "OK: $name установлен"
+        return 0
     else
-        echo "WARN: Ошибка установки $name (пропущено)"
+        if [ "$optional" = "true" ]; then
+            echo "SKIP: $name пропущен (опциональный)"
+        else
+            echo "WARN: Ошибка установки $name"
+            echo "Попытка установки без зависимостей..."
+            # Попытка установки с игнорированием зависимостей
+            if sudo -u liveuser yay -S --noconfirm --needed --nodeps --removemake --cleanafter --mflags "--nocheck --skippgpcheck" "$package" 2>&1 | tee -a /tmp/install-$package.log; then
+                echo "OK: $name установлен (без зависимостей)"
+                return 0
+            else
+                echo "FAIL: $name не установлен"
+            fi
+        fi
+        return 1
     fi
 }
 
-# Установка пакетов из AUR
-install_package "Latte Dock" "latte-dock"
-install_package "Calamares" "calamares"
-install_package "WhiteSur Icons" "whitesur-icon-theme-git"
-install_package "WhiteSur Cursors" "whitesur-cursors-git"
+# Обновление базы данных пакетов
+echo "Обновление базы данных пакетов..."
+sudo -u liveuser yay -Sy --noconfirm
+
+# Установка пакетов из AUR (в правильном порядке)
+echo ""
+echo "================================================================"
+echo "Установка пакетов из AUR..."
+echo "================================================================"
+
+# 1. Latte Dock (критичный)
+install_package "Latte Dock" "latte-dock" false
+
+# 2. Calamares (критичный)
+install_package "Calamares" "calamares" false
+
+# 3. WhiteSur Icons (опциональный)
+install_package "WhiteSur Icons" "whitesur-icon-theme-git" true
+
+# 4. WhiteSur Cursors (опциональный)
+install_package "WhiteSur Cursors" "whitesur-cursors-git" true
+
+# Проверка установленных пакетов
+echo ""
+echo "================================================================"
+echo "Проверка установленных пакетов..."
+echo "================================================================"
+
+INSTALLED_COUNT=0
+FAILED_PACKAGES=""
+
+if pacman -Qi latte-dock &>/dev/null; then
+    echo "✅ Latte Dock установлен"
+    INSTALLED_COUNT=$((INSTALLED_COUNT + 1))
+else
+    echo "❌ Latte Dock НЕ установлен"
+    FAILED_PACKAGES="$FAILED_PACKAGES latte-dock"
+fi
+
+if pacman -Qi calamares &>/dev/null; then
+    echo "✅ Calamares установлен"
+    INSTALLED_COUNT=$((INSTALLED_COUNT + 1))
+else
+    echo "❌ Calamares НЕ установлен"
+    FAILED_PACKAGES="$FAILED_PACKAGES calamares"
+fi
+
+if pacman -Qi whitesur-icon-theme-git &>/dev/null; then
+    echo "✅ WhiteSur Icons установлены"
+    INSTALLED_COUNT=$((INSTALLED_COUNT + 1))
+else
+    echo "⚠️  WhiteSur Icons не установлены (опционально)"
+fi
+
+if pacman -Qi whitesur-cursors-git &>/dev/null; then
+    echo "✅ WhiteSur Cursors установлены"
+    INSTALLED_COUNT=$((INSTALLED_COUNT + 1))
+else
+    echo "⚠️  WhiteSur Cursors не установлены (опционально)"
+fi
+
+echo ""
+echo "Установлено пакетов: $INSTALLED_COUNT"
+
+if [ -n "$FAILED_PACKAGES" ]; then
+    echo ""
+    echo "⚠️  Не удалось установить критичные пакеты:$FAILED_PACKAGES"
+    echo ""
+    echo "Вы можете установить их вручную позже:"
+    for pkg in $FAILED_PACKAGES; do
+        echo "  yay -S $pkg"
+    done
+fi
 
 # Очистка кэша
 echo ""
@@ -137,30 +229,51 @@ sudo -u liveuser bash << 'EOFAPPLY'
 export HOME=/home/liveuser
 export USER=liveuser
 
-# Обновление kdeglobals для иконок
-if [ -f "$HOME/.config/kdeglobals" ]; then
-    # Обновляем существующий файл
-    sed -i '/\[Icons\]/,/^$/d' "$HOME/.config/kdeglobals"
-    echo "" >> "$HOME/.config/kdeglobals"
-    echo "[Icons]" >> "$HOME/.config/kdeglobals"
-    echo "Theme=WhiteSur-dark" >> "$HOME/.config/kdeglobals"
-else
-    # Создаем новый файл
-    mkdir -p "$HOME/.config"
-    cat > "$HOME/.config/kdeglobals" << 'EOF'
+# Проверка установленных тем
+ICONS_INSTALLED=false
+CURSORS_INSTALLED=false
+
+if pacman -Qi whitesur-icon-theme-git &>/dev/null; then
+    ICONS_INSTALLED=true
+fi
+
+if pacman -Qi whitesur-cursors-git &>/dev/null; then
+    CURSORS_INSTALLED=true
+fi
+
+# Применение иконок если установлены
+if [ "$ICONS_INSTALLED" = true ]; then
+    echo "Применение иконок WhiteSur..."
+    if [ -f "$HOME/.config/kdeglobals" ]; then
+        sed -i '/\[Icons\]/,/^$/d' "$HOME/.config/kdeglobals"
+        echo "" >> "$HOME/.config/kdeglobals"
+        echo "[Icons]" >> "$HOME/.config/kdeglobals"
+        echo "Theme=WhiteSur-dark" >> "$HOME/.config/kdeglobals"
+    else
+        mkdir -p "$HOME/.config"
+        cat > "$HOME/.config/kdeglobals" << 'EOF'
 [Icons]
 Theme=WhiteSur-dark
 EOF
+    fi
+    echo "✅ Иконки WhiteSur применены"
+else
+    echo "⚠️  Иконки WhiteSur не установлены, используются стандартные"
 fi
 
-# Обновление kcminputrc для курсоров
-mkdir -p "$HOME/.config"
-cat > "$HOME/.config/kcminputrc" << 'EOF'
+# Применение курсоров если установлены
+if [ "$CURSORS_INSTALLED" = true ]; then
+    echo "Применение курсоров WhiteSur..."
+    mkdir -p "$HOME/.config"
+    cat > "$HOME/.config/kcminputrc" << 'EOF'
 [Mouse]
 cursorTheme=WhiteSur-cursors
 EOF
+    echo "✅ Курсоры WhiteSur применены"
+else
+    echo "⚠️  Курсоры WhiteSur не установлены, используются стандартные"
+fi
 
-echo "✅ Иконки и курсоры применены"
 EOFAPPLY
 
 # Отметка о выполнении

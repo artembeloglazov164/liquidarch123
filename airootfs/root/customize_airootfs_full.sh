@@ -88,67 +88,94 @@ rm -rf /var/cache/pacman/pkg/* || true
 echo "Установка Latte Dock из AUR..."
 sudo -u liveuser bash << 'EOFLATTE'
 set -e
-yay -S --noconfirm --removemake --cleanafter latte-dock
+yay -S --noconfirm --needed --removemake --cleanafter --mflags "--nocheck --skippgpcheck" latte-dock || \
+yay -S --noconfirm --needed --nodeps --removemake --cleanafter --mflags "--nocheck --skippgpcheck" latte-dock
 yay -Sc --noconfirm
 EOFLATTE
 pacman -Scc --noconfirm || true
 rm -rf /var/cache/pacman/pkg/* || true
-echo "Latte Dock установлен!"
+
+if pacman -Qi latte-dock &>/dev/null; then
+    echo "✅ Latte Dock установлен!"
+else
+    echo "⚠️  Latte Dock не установлен (будет доступен для установки вручную)"
+fi
 
 # Установка Calamares из AUR
 echo "Установка Calamares из AUR..."
 sudo -u liveuser bash << 'EOFCALA'
 set -e
-yay -S --noconfirm --removemake --cleanafter calamares
+yay -S --noconfirm --needed --removemake --cleanafter --mflags "--nocheck --skippgpcheck" calamares || \
+yay -S --noconfirm --needed --nodeps --removemake --cleanafter --mflags "--nocheck --skippgpcheck" calamares
 yay -Sc --noconfirm
 EOFCALA
 pacman -Scc --noconfirm || true
 rm -rf /var/cache/pacman/pkg/* || true
-echo "Calamares установлен!"
 
-# Установка WhiteSur Icons
+if pacman -Qi calamares &>/dev/null; then
+    echo "✅ Calamares установлен!"
+else
+    echo "⚠️  Calamares не установлен (будет доступен для установки вручную)"
+fi
+
+# Установка WhiteSur Icons (опционально)
 echo "Установка WhiteSur Icons из AUR..."
 sudo -u liveuser bash << 'EOFICON'
-set -e
-yay -S --noconfirm --removemake --cleanafter whitesur-icon-theme-git || echo "WhiteSur Icons пропущены"
+yay -S --noconfirm --needed --removemake --cleanafter --mflags "--nocheck --skippgpcheck" whitesur-icon-theme-git || \
+echo "WhiteSur Icons пропущены"
 yay -Sc --noconfirm
 EOFICON
 pacman -Scc --noconfirm || true
-echo "WhiteSur Icons установлены!"
 
-# Установка WhiteSur Cursors
+if pacman -Qi whitesur-icon-theme-git &>/dev/null; then
+    echo "✅ WhiteSur Icons установлены!"
+else
+    echo "⚠️  WhiteSur Icons не установлены (опционально)"
+fi
+
+# Установка WhiteSur Cursors (опционально)
 echo "Установка WhiteSur Cursors из AUR..."
 sudo -u liveuser bash << 'EOFCURSOR'
-set -e
-yay -S --noconfirm --removemake --cleanafter whitesur-cursors-git || echo "WhiteSur Cursors пропущены"
+yay -S --noconfirm --needed --removemake --cleanafter --mflags "--nocheck --skippgpcheck" whitesur-cursors-git || \
+echo "WhiteSur Cursors пропущены"
 yay -Sc --noconfirm
 EOFCURSOR
 pacman -Scc --noconfirm || true
-echo "WhiteSur Cursors установлены!"
 
-# Применение иконок и курсоров для liveuser
+if pacman -Qi whitesur-cursors-git &>/dev/null; then
+    echo "✅ WhiteSur Cursors установлены!"
+else
+    echo "⚠️  WhiteSur Cursors не установлены (опционально)"
+fi
+
+# Применение иконок и курсоров для liveuser (только если установлены)
 echo "Применение иконок и курсоров для liveuser..."
 sudo -u liveuser bash << 'EOFAPPLY'
 export HOME=/home/liveuser
 export USER=liveuser
 
-# Обновление kdeglobals для иконок
-if [ -f "$HOME/.config/kdeglobals" ]; then
-    sed -i '/\[Icons\]/,/^$/d' "$HOME/.config/kdeglobals"
-    echo "" >> "$HOME/.config/kdeglobals"
-    echo "[Icons]" >> "$HOME/.config/kdeglobals"
-    echo "Theme=WhiteSur-dark" >> "$HOME/.config/kdeglobals"
+# Проверка и применение иконок
+if pacman -Qi whitesur-icon-theme-git &>/dev/null; then
+    if [ -f "$HOME/.config/kdeglobals" ]; then
+        sed -i '/\[Icons\]/,/^$/d' "$HOME/.config/kdeglobals"
+        echo "" >> "$HOME/.config/kdeglobals"
+        echo "[Icons]" >> "$HOME/.config/kdeglobals"
+        echo "Theme=WhiteSur-dark" >> "$HOME/.config/kdeglobals"
+    fi
+    echo "✅ Иконки применены"
 fi
 
-# Обновление kcminputrc для курсоров
-if [ -f "$HOME/.config/kcminputrc" ]; then
-    sed -i '/\[Mouse\]/,/^$/d' "$HOME/.config/kcminputrc"
-    echo "" >> "$HOME/.config/kcminputrc"
-    echo "[Mouse]" >> "$HOME/.config/kcminputrc"
-    echo "cursorTheme=WhiteSur-cursors" >> "$HOME/.config/kcminputrc"
+# Проверка и применение курсоров
+if pacman -Qi whitesur-cursors-git &>/dev/null; then
+    if [ -f "$HOME/.config/kcminputrc" ]; then
+        sed -i '/\[Mouse\]/,/^$/d' "$HOME/.config/kcminputrc"
+        echo "" >> "$HOME/.config/kcminputrc"
+        echo "[Mouse]" >> "$HOME/.config/kcminputrc"
+        echo "cursorTheme=WhiteSur-cursors" >> "$HOME/.config/kcminputrc"
+    fi
+    echo "✅ Курсоры применены"
 fi
 
-echo "✅ Иконки и курсоры применены"
 EOFAPPLY
 
 # Финальная очистка кэша AUR
