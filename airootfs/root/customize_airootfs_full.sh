@@ -40,6 +40,10 @@ EOF
 echo "Установка yay..."
 cd /tmp
 
+# Очистка перед установкой
+pacman -Scc --noconfirm || true
+rm -rf /var/cache/pacman/pkg/* || true
+
 sudo -u liveuser bash << 'EOFYAY'
 set -e
 cd /tmp
@@ -52,12 +56,20 @@ EOFYAY
 
 echo "yay установлен!"
 
+# Очистка после установки yay
+pacman -Scc --noconfirm || true
+rm -rf /var/cache/pacman/pkg/* || true
+
 # Установка Latte Dock из AUR
 echo "Установка Latte Dock из AUR..."
 sudo -u liveuser bash << 'EOFLATTE'
 set -e
 yay -S --noconfirm --removemake --cleanafter latte-dock
+yay -Sc --noconfirm
 EOFLATTE
+# Очистка кэша
+pacman -Scc --noconfirm || true
+rm -rf /var/cache/pacman/pkg/* || true
 echo "Latte Dock установлен!"
 
 # Установка Calamares из AUR
@@ -65,7 +77,11 @@ echo "Установка Calamares из AUR..."
 sudo -u liveuser bash << 'EOFCALA'
 set -e
 yay -S --noconfirm --removemake --cleanafter calamares
+yay -Sc --noconfirm
 EOFCALA
+# Очистка кэша
+pacman -Scc --noconfirm || true
+rm -rf /var/cache/pacman/pkg/* || true
 echo "Calamares установлен!"
 
 # Установка тем macOS из AUR
@@ -75,44 +91,58 @@ echo "Установка тем macOS из AUR..."
 sudo -u liveuser bash << 'EOFTHEME'
 set -e
 yay -S --noconfirm --removemake --cleanafter macsonoma-kde-git || echo "MacSonoma theme пропущена"
+yay -Sc --noconfirm
 EOFTHEME
+pacman -Scc --noconfirm || true
 
 # WhiteSur GTK theme
 sudo -u liveuser bash << 'EOFGTK'
 set -e
 yay -S --noconfirm --removemake --cleanafter whitesur-gtk-theme-git || echo "WhiteSur GTK пропущена"
+yay -Sc --noconfirm
 EOFGTK
+pacman -Scc --noconfirm || true
 
 # WhiteSur Icon theme
 sudo -u liveuser bash << 'EOFICON'
 set -e
 yay -S --noconfirm --removemake --cleanafter whitesur-icon-theme-git || echo "WhiteSur Icons пропущены"
+yay -Sc --noconfirm
 EOFICON
+pacman -Scc --noconfirm || true
 
 # WhiteSur Cursors
 sudo -u liveuser bash << 'EOFCURSOR'
 set -e
 yay -S --noconfirm --removemake --cleanafter whitesur-cursors-git || echo "WhiteSur Cursors пропущены"
+yay -Sc --noconfirm
 EOFCURSOR
+pacman -Scc --noconfirm || true
 
 # Albert Launcher
 sudo -u liveuser bash << 'EOFALBERT'
 set -e
 yay -S --noconfirm --removemake --cleanafter albert || echo "Albert пропущен"
+yay -Sc --noconfirm
 EOFALBERT
+pacman -Scc --noconfirm || true
 
 # Lightly Application Style
 sudo -u liveuser bash << 'EOFLIGHTLY'
 set -e
 yay -S --noconfirm --removemake --cleanafter lightly-qt || echo "Lightly пропущен"
+yay -Sc --noconfirm
 EOFLIGHTLY
+pacman -Scc --noconfirm || true
 
 echo "Темы macOS установлены!"
 
-# Очистка кэша AUR
-echo "Очистка кэша AUR..."
+# Финальная очистка кэша AUR
+echo "Финальная очистка кэша..."
 sudo -u liveuser yay -Sc --noconfirm || true
 rm -rf /home/liveuser/.cache/yay
+rm -rf /var/cache/pacman/pkg/*
+rm -rf /tmp/*
 
 # Создание иконки на рабочем столе для запуска Calamares
 mkdir -p /etc/skel/Desktop

@@ -16,21 +16,21 @@
 
 1. **Docker Desktop**: https://docs.docker.com/desktop/install/windows-install/
 2. **WSL 2** (рекомендуется)
-3. **Минимум 20 ГБ свободного места**
-4. **4 ГБ RAM** (рекомендуется 8 ГБ)
+3. **Минимум 30 ГБ свободного места** (LITE) или **50 ГБ** (FULL)
+4. **8 ГБ RAM** (рекомендуется 16 ГБ для FULL режима)
 
 ### macOS
 
 1. **Docker Desktop**: https://docs.docker.com/desktop/install/mac-install/
-2. **Минимум 20 ГБ свободного места**
-3. **4 ГБ RAM** (рекомендуется 8 ГБ)
+2. **Минимум 30 ГБ свободного места** (LITE) или **50 ГБ** (FULL)
+3. **8 ГБ RAM** (рекомендуется 16 ГБ для FULL режима)
 
 ### Linux
 
 1. **Docker Engine**: https://docs.docker.com/engine/install/
 2. **Docker Compose**: обычно включен в Docker Engine
-3. **Минимум 20 ГБ свободного места**
-4. **4 ГБ RAM** (рекомендуется 8 ГБ)
+3. **Минимум 30 ГБ свободного места** (LITE) или **50 ГБ** (FULL)
+4. **8 ГБ RAM** (рекомендуется 16 ГБ для FULL режима)
 
 ---
 
@@ -279,7 +279,15 @@ docker system prune -a --volumes
 
 # Увеличьте место для Docker Desktop (Windows/macOS)
 # Settings → Resources → Disk image size
+# Рекомендуется: 60 ГБ для FULL режима, 40 ГБ для LITE
 ```
+
+**Docker Desktop настройки:**
+1. Откройте Docker Desktop
+2. Settings (⚙️) → Resources → Advanced
+3. Disk image size: увеличьте до 60 ГБ
+4. Memory: увеличьте до 8 ГБ (16 ГБ для FULL)
+5. Apply & Restart
 
 ### "Build failed" в контейнере
 
