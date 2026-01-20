@@ -37,6 +37,16 @@ else
     echo "⚠️  Тема MacVentura не найдена в ../themes/MacVentura"
 fi
 
+# Копирование темы GRUB
+echo "🎨 Копирование темы GRUB..."
+if [ -d "../grub/macOS-theme" ]; then
+    mkdir -p "$WORK_DIR/airootfs/grub-theme"
+    cp -r ../grub/macOS-theme/* "$WORK_DIR/airootfs/grub-theme/"
+    echo "✅ Тема GRUB скопирована"
+else
+    echo "⚠️  Тема GRUB не найдена, будет создана базовая тема"
+fi
+
 # Сборка ISO
 echo "🔨 Сборка ISO образа..."
 mkarchiso -v -w "$WORK_DIR/work" -o ../out "$WORK_DIR"

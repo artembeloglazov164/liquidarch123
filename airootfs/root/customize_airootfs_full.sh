@@ -126,6 +126,31 @@ EOFCURSOR
 pacman -Scc --noconfirm || true
 echo "WhiteSur Cursors установлены!"
 
+# Применение иконок и курсоров для liveuser
+echo "Применение иконок и курсоров для liveuser..."
+sudo -u liveuser bash << 'EOFAPPLY'
+export HOME=/home/liveuser
+export USER=liveuser
+
+# Обновление kdeglobals для иконок
+if [ -f "$HOME/.config/kdeglobals" ]; then
+    sed -i '/\[Icons\]/,/^$/d' "$HOME/.config/kdeglobals"
+    echo "" >> "$HOME/.config/kdeglobals"
+    echo "[Icons]" >> "$HOME/.config/kdeglobals"
+    echo "Theme=WhiteSur-dark" >> "$HOME/.config/kdeglobals"
+fi
+
+# Обновление kcminputrc для курсоров
+if [ -f "$HOME/.config/kcminputrc" ]; then
+    sed -i '/\[Mouse\]/,/^$/d' "$HOME/.config/kcminputrc"
+    echo "" >> "$HOME/.config/kcminputrc"
+    echo "[Mouse]" >> "$HOME/.config/kcminputrc"
+    echo "cursorTheme=WhiteSur-cursors" >> "$HOME/.config/kcminputrc"
+fi
+
+echo "✅ Иконки и курсоры применены"
+EOFAPPLY
+
 # Финальная очистка кэша AUR
 echo "Финальная очистка кэша..."
 sudo -u liveuser yay -Sc --noconfirm || true
@@ -178,37 +203,25 @@ fi
 # Установка темы MacVentura (системная установка)
 echo "Установка темы MacVentura..."
 if [ -f /usr/local/bin/install-macventura-theme.sh ]; then
-    # Установка от root для системы
+    chmod +x /usr/local/bin/install-macventura-theme.sh
     bash /usr/local/bin/install-macventura-theme.sh
-    
-    # Применение темы для liveuser
+    echo "✅ Тема MacVentura установлена системно"
+else
+    echo "⚠️  Скрипт установки темы не найден"
+fi
+
+# Применение темы для liveuser
+echo "Применение темы для liveuser..."
+if [ -f /usr/local/bin/apply-macventura-theme.sh ]; then
+    chmod +x /usr/local/bin/apply-macventura-theme.sh
     sudo -u liveuser bash << 'EOFTHEME'
 export HOME=/home/liveuser
 export USER=liveuser
-
-# Применение Kvantum темы
-if command -v kvantummanager &> /dev/null; then
-    mkdir -p "$HOME/.config/Kvantum"
-    echo "theme=MacVentura" > "$HOME/.config/Kvantum/kvantum.kvconfig"
-fi
-
-# Применение глобальной темы KDE
-kwriteconfig5 --file kdeglobals --group KDE --key LookAndFeelPackage "com.github.vinceliuice.MacVentura-Dark"
-kwriteconfig5 --file kdeglobals --group General --key ColorScheme "MacVenturaDark"
-kwriteconfig5 --file kwinrc --group org.kde.kdecoration2 --key theme "__aurorae__svg__MacVentura-Dark"
-kwriteconfig5 --file plasmarc --group Theme --key name "MacVentura-Dark"
-
-# Применение иконок WhiteSur
-kwriteconfig5 --file kdeglobals --group Icons --key Theme "WhiteSur-dark"
-
-# Применение курсоров WhiteSur
-kwriteconfig5 --file kcminputrc --group Mouse --key cursorTheme "WhiteSur-cursors"
-
+bash /usr/local/bin/apply-macventura-theme.sh
 EOFTHEME
-    
-    echo "✅ Тема MacVentura установлена и применена"
+    echo "✅ Тема применена для liveuser"
 else
-    echo "⚠️  Скрипт установки темы не найден"
+    echo "⚠️  Скрипт применения темы не найден"
 fi
 
 # Копирование конфигов для всех пользователей

@@ -1,16 +1,26 @@
 #!/bin/bash
-# Установка GRUB темы 320kgpenguin
+# Установка GRUB темы macOS Arch
 
-echo "🎨 Установка GRUB темы 320kgpenguin..."
+echo "🎨 Установка GRUB темы macOS Arch..."
 
-THEME_DIR="/boot/grub/themes/320kgpenguin"
+THEME_SOURCE="/grub-theme"
+THEME_DEST="/boot/grub/themes/macos-arch"
 
-# Создание директории темы
-mkdir -p "$THEME_DIR"
+# Создание директории назначения
+mkdir -p "$THEME_DEST"
 
-# Копирование theme.txt
-cat > "$THEME_DIR/theme.txt" << 'EOF'
-# 320kgpenguin macOS Liquid Glass GRUB Theme
+# Проверка наличия темы
+if [ -d "$THEME_SOURCE" ] && [ -f "$THEME_SOURCE/theme.txt" ]; then
+    # Копирование темы из исходников
+    echo "Копирование темы GRUB из $THEME_SOURCE..."
+    cp -r "$THEME_SOURCE"/* "$THEME_DEST/"
+    echo "✅ Тема Matrices-circle-window скопирована"
+else
+    echo "⚠️  Тема GRUB не найдена в $THEME_SOURCE"
+    echo "Создание базовой темы..."
+    
+    cat > "$THEME_DEST/theme.txt" << 'EOF'
+# macOS Arch GRUB Theme
 
 title-text: ""
 desktop-color: "#1e1e2e"
@@ -33,7 +43,7 @@ terminal-font: "Terminus Regular 14"
   left = 0
   width = 100%
   height = 20
-  text = "🐧 320kgpenguin - macOS Liquid Arch"
+  text = "🍎 macOS Arch"
   color = "#cdd6f4"
   align = "center"
 }
@@ -50,21 +60,27 @@ terminal-font: "Terminus Regular 14"
   border_color = "#45475a"
 }
 EOF
-
-# Создание простого фона
-convert -size 1920x1080 xc:"#1e1e2e" "$THEME_DIR/background.png" 2>/dev/null || \
-    echo "⚠️  ImageMagick не установлен, фон не создан"
+    echo "✅ Базовая тема создана"
+fi
 
 # Обновление GRUB конфигурации
 if [ -f /etc/default/grub ]; then
-    sed -i 's|^#GRUB_THEME=.*|GRUB_THEME="/boot/grub/themes/320kgpenguin/theme.txt"|' /etc/default/grub
-    sed -i 's|^GRUB_THEME=.*|GRUB_THEME="/boot/grub/themes/320kgpenguin/theme.txt"|' /etc/default/grub
+    echo "Обновление /etc/default/grub..."
     
-    # Если строки нет, добавляем
-    if ! grep -q "GRUB_THEME=" /etc/default/grub; then
-        echo 'GRUB_THEME="/boot/grub/themes/320kgpenguin/theme.txt"' >> /etc/default/grub
-    fi
+    # Удаляем старые строки GRUB_THEME
+    sed -i '/^#GRUB_THEME=/d' /etc/default/grub
+    sed -i '/^GRUB_THEME=/d' /etc/default/grub
+    
+    # Добавляем новую строку
+    echo 'GRUB_THEME="/boot/grub/themes/macos-arch/theme.txt"' >> /etc/default/grub
+    
+    echo "✅ GRUB конфигурация обновлена"
+else
+    echo "⚠️  /etc/default/grub не найден (это нормально для Live ISO)"
 fi
 
 echo "✅ GRUB тема установлена!"
-echo "Запустите: grub-mkconfig -o /boot/grub/grub.cfg"
+echo ""
+echo "Тема будет активна после установки системы на диск"
+echo "После установки выполните: sudo grub-mkconfig -o /boot/grub/grub.cfg"
+echo ""
