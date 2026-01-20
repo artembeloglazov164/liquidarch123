@@ -1,20 +1,25 @@
-# 🚀 Быстрый старт 320kgpenguin
+# 🚀 Быстрый старт macOS Arch
 
 ## 📥 Скачать ISO
 
-1. Перейдите в [Releases](https://github.com/320kgpenguin/macos-liquid-arch/releases)
-2. Скачайте последний ISO файл
+**GitHub Actions Artifacts:**
+1. Перейдите в [Actions](https://github.com/320kgpenguin/macos-arch/actions)
+2. Выберите последний успешный run (✓)
+3. Скачайте `macos-arch-iso` из Artifacts
+4. Распакуйте ZIP
 
 **Или соберите сами:**
 - [DOCKER-BUILD.md](docs/DOCKER-BUILD.md) - сборка в Docker (рекомендуется)
 - [BUILD.md](BUILD.md) - полная инструкция по сборке
 - [ARCH-VM-QUICKSTART.md](docs/ARCH-VM-QUICKSTART.md) - быстрая установка Arch в VM
 
+**Примечание:** ISO >2 ГБ, поэтому не может быть загружен в GitHub Releases.
+
 ## 💾 Записать на USB
 
 ### Linux/macOS
 ```bash
-sudo dd bs=4M if=320kgpenguin-*.iso of=/dev/sdX status=progress oflag=sync
+sudo dd bs=4M if=macos-arch-*.iso of=/dev/sdX status=progress oflag=sync
 ```
 
 ### Windows
@@ -89,7 +94,7 @@ makepkg -si
 
 ## ❓ Проблемы?
 
-См. [FAQ](docs/FAQ.md) или создайте [Issue](https://github.com/320kgpenguin/macos-liquid-arch/issues)
+См. [FAQ](docs/FAQ.md) или создайте [Issue](https://github.com/320kgpenguin/macos-arch/issues)
 
 ---
 

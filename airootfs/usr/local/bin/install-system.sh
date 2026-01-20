@@ -118,22 +118,6 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 EOFCHROOT
 
-# Копирование скрипта настройки
-echo "📋 Копирование настроек macOS..."
-cp /usr/local/bin/setup-macos-style.sh /mnt/usr/local/bin/
-chmod +x /mnt/usr/local/bin/setup-macos-style.sh
-
-mkdir -p /mnt/home/user/.config/autostart
-cat > /mnt/home/user/.config/autostart/setup-macos-style.desktop << 'EOF'
-[Desktop Entry]
-Type=Application
-Name=Setup macOS Style
-Exec=/usr/local/bin/setup-macos-style.sh
-Hidden=false
-NoDisplay=false
-X-GNOME-Autostart-enabled=true
-EOF
-
 arch-chroot /mnt chown -R user:user /home/user
 
 # Размонтирование

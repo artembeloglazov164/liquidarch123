@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Кастомизация 320kgpenguin (macOS Liquid Arch)
+# Кастомизация macOS Arch
 # ПОЛНАЯ ВЕРСИЯ - все устанавливается во время сборки ISO
 
 set -e -u
 
-echo "Начало кастомизации 320kgpenguin (ПОЛНАЯ ВЕРСИЯ)"
+echo "Начало кастомизации macOS Arch (ПОЛНАЯ ВЕРСИЯ)"
 
 # Создание пользователя liveuser
 echo "Создание пользователя liveuser..."
@@ -57,10 +57,22 @@ cd yay_12.5.7_x86_64
 # Установка бинарника
 sudo install -Dm755 yay /usr/bin/yay
 
-# Установка дополнительных файлов (если есть)
-[ -f yay.8 ] && sudo install -Dm644 yay.8 /usr/share/man/man8/yay.8 || true
-[ -f yay.fish ] && sudo install -Dm644 yay.fish /usr/share/fish/vendor_completions.d/yay.fish || true
-[ -f yay.bash ] && sudo install -Dm644 yay.bash /usr/share/bash-completion/completions/yay || true
+# Установка дополнительных файлов (только если они существуют)
+if [ -f yay.8 ]; then
+    sudo install -Dm644 yay.8 /usr/share/man/man8/yay.8
+fi
+
+if [ -f yay.fish ]; then
+    sudo install -Dm644 yay.fish /usr/share/fish/vendor_completions.d/yay.fish
+fi
+
+if [ -f yay.bash ]; then
+    sudo install -Dm644 yay.bash /usr/share/bash-completion/completions/yay
+fi
+
+if [ -f zsh ]; then
+    sudo install -Dm644 zsh /usr/share/zsh/site-functions/_yay
+fi
 
 cd /tmp
 rm -rf yay_12.5.7_x86_64 yay_12.5.7_x86_64.tar.gz
@@ -161,8 +173,8 @@ mkdir -p /etc/skel/Desktop
 cat > /etc/skel/Desktop/install-system.desktop << 'EOFDESKTOP'
 [Desktop Entry]
 Type=Application
-Name=Install macOS Liquid Arch
-Name[ru]=Установить macOS Liquid Arch
+Name=Install macOS Arch
+Name[ru]=Установить macOS Arch
 Comment=Install system to disk
 Comment[ru]=Установить систему на диск
 Icon=system-software-install
@@ -224,7 +236,7 @@ cat > /etc/skel/.config/fastfetch/config.jsonc << 'EOF'
     "modules": [
         {
             "type": "custom",
-            "format": "320kgpenguin (macOS Liquid Arch)"
+            "format": "macOS Arch"
         },
         "break",
         {
@@ -291,18 +303,18 @@ cat > /etc/skel/.config/fastfetch/config.jsonc << 'EOF'
 }
 EOF
 
-# Создание /etc/os-release для 320kgpenguin
+# Создание /etc/os-release для macOS Arch
 cat > /etc/os-release << 'EOF'
-NAME="320kgpenguin"
-PRETTY_NAME="320kgpenguin (macOS Liquid Arch)"
-ID=320kgpenguin
+NAME="macOS Arch"
+PRETTY_NAME="macOS Arch"
+ID=macos-arch
 ID_LIKE=arch
 BUILD_ID=rolling
 ANSI_COLOR="38;2;23;147;209"
-HOME_URL="https://github.com/320kgpenguin/macos-liquid-arch"
-DOCUMENTATION_URL="https://github.com/320kgpenguin/macos-liquid-arch"
-SUPPORT_URL="https://github.com/320kgpenguin/macos-liquid-arch/issues"
-BUG_REPORT_URL="https://github.com/320kgpenguin/macos-liquid-arch/issues"
+HOME_URL="https://github.com/320kgpenguin/macos-arch"
+DOCUMENTATION_URL="https://github.com/320kgpenguin/macos-arch"
+SUPPORT_URL="https://github.com/320kgpenguin/macos-arch/issues"
+BUG_REPORT_URL="https://github.com/320kgpenguin/macos-arch/issues"
 LOGO=archlinux
 EOF
 
@@ -328,7 +340,7 @@ EOFSETUP
 echo ""
 echo "Кастомизация завершена!"
 echo ""
-echo "320kgpenguin (macOS Liquid Arch) готов!"
+echo "macOS Arch готов!"
 echo ""
 echo "Учетные данные Live ISO:"
 echo "  liveuser (без пароля, автологин)"
@@ -337,7 +349,7 @@ echo "  sudo работает без пароля"
 echo ""
 echo "Установка системы:"
 echo "  Calamares запустится автоматически после загрузки KDE"
-echo "  Или кликните иконку 'Install macOS Liquid Arch' на рабочем столе"
+echo "  Или кликните иконку 'Install macOS Arch' на рабочем столе"
 echo ""
 echo "ВСЕ КОМПОНЕНТЫ УЖЕ УСТАНОВЛЕНЫ:"
 echo "  - Latte Dock (панель внизу)"

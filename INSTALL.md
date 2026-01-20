@@ -49,7 +49,7 @@ sudo dd bs=4M if=out/macos-liquid-arch-*.iso of=/dev/sdX status=progress oflag=s
 - Вставьте USB и перезагрузите компьютер
 - Войдите в Boot Menu (обычно F12, F2, Del или Esc)
 - Выберите USB устройство
-- Выберите "320kgpenguin (macOS Liquid Arch)" в меню GRUB
+- Выберите "macOS Arch" в меню GRUB
 
 ### 2. Вход в Live систему
 

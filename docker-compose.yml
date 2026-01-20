@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # LITE режим - AUR пакеты устанавливаются при первом запуске
   archiso-builder:
@@ -8,7 +6,7 @@ services:
       dockerfile: Dockerfile
       args:
         BUILD_MODE: lite
-    container_name: 320kgpenguin-builder-lite
+    container_name: macos-arch-builder-lite
     privileged: true
     volumes:
       - .:/build
@@ -26,7 +24,7 @@ services:
       dockerfile: Dockerfile
       args:
         BUILD_MODE: full
-    container_name: 320kgpenguin-builder-full
+    container_name: macos-arch-builder-full
     privileged: true
     volumes:
       - .:/build

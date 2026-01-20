@@ -285,7 +285,7 @@ git checkout -- airootfs/root/customize_airootfs.sh
    ```
 
 2. **Создайте Issue:**
-   - https://github.com/320kgpenguin/macos-liquid-arch/issues
+   - https://github.com/320kgpenguin/macos-arch/issues
    - Приложите логи
    - Укажите систему (Windows/macOS/Linux)
    - Укажите режим (LITE/FULL)

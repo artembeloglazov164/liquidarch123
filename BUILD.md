@@ -1,4 +1,4 @@
-# 🔨 Сборка 320kgpenguin ISO
+# 🔨 Сборка macOS Arch ISO
 
 ## Способ 1: GitHub Actions (автоматически)
 
@@ -58,7 +58,7 @@ RAM: 4096 МБ (или больше)
 
 ```bash
 # Скачайте скрипт
-curl -O https://raw.githubusercontent.com/320kgpenguin/macos-liquid-arch/main/scripts/auto-install-arch.sh
+curl -O https://raw.githubusercontent.com/320kgpenguin/macos-arch/main/scripts/auto-install-arch.sh
 
 # Запустите
 bash auto-install-arch.sh
@@ -173,8 +173,8 @@ sudo pacman -S --noconfirm archiso git
 
 # Клонирование репозитория
 cd ~
-git clone https://github.com/320kgpenguin/macos-liquid-arch.git
-cd macos-liquid-arch
+git clone https://github.com/320kgpenguin/macos-arch.git
+cd macos-arch
 ```
 
 ### 2.2 Сборка ISO
@@ -197,7 +197,7 @@ sudo bash build.sh
 ISO будет создан в `out/`:
 ```bash
 ls -lh ../out/
-# 320kgpenguin-2026.01.19-x86_64.iso (~3-4 ГБ)
+# macos-arch-2026.01.19-x86_64.iso (~3-4 ГБ)
 ```
 
 ---
@@ -270,7 +270,7 @@ python -m http.server 8000
 
 ```bash
 # Запишите на USB (Linux/macOS)
-sudo dd bs=4M if=320kgpenguin-*.iso of=/dev/sdX status=progress oflag=sync
+sudo dd bs=4M if=macos-arch-*.iso of=/dev/sdX status=progress oflag=sync
 
 # Или используйте Rufus/Etcher на Windows
 ```

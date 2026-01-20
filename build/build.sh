@@ -3,7 +3,7 @@
 
 set -e
 
-echo "🍎 Начинаем сборку macOS Liquid Arch (GNOME Edition)..."
+echo "🍎 Начинаем сборку macOS Arch..."
 
 # Проверка прав root
 if [ "$EUID" -ne 0 ]; then 

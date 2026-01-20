@@ -1,4 +1,4 @@
-# Темы macOS для 320kgpenguin
+# Темы macOS для macOS Arch
 
 Положите сюда ZIP файлы с темами:
 
