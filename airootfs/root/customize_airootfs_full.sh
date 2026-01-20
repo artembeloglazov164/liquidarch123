@@ -43,6 +43,8 @@ cd /tmp
 # Исправление для работы в chroot
 export PKGDEST=/tmp/packages
 mkdir -p /tmp/packages
+chown -R liveuser:liveuser /tmp/packages
+chmod 755 /tmp/packages
 
 # Очистка перед установкой
 pacman -Scc --noconfirm || true

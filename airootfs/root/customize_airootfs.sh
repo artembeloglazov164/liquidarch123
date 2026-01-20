@@ -42,6 +42,8 @@ cd /tmp
 # Исправление для работы в chroot
 export PKGDEST=/tmp/packages
 mkdir -p /tmp/packages
+chown -R liveuser:liveuser /tmp/packages
+chmod 755 /tmp/packages
 
 # Установка yay-bin (бинарная версия, не требует компиляции Go)
 sudo -u liveuser bash << 'EOFYAY'
