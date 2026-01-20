@@ -27,6 +27,16 @@ cp -r /usr/share/archiso/configs/releng/* "$WORK_DIR/"
 cp -r ../airootfs/* "$WORK_DIR/airootfs/" 2>/dev/null || true
 cp ../packages.x86_64 "$WORK_DIR/"
 
+# Копирование темы MacVentura
+echo "🎨 Копирование темы MacVentura..."
+if [ -d "../themes/MacVentura" ]; then
+    mkdir -p "$WORK_DIR/airootfs/themes"
+    cp -r ../themes/MacVentura "$WORK_DIR/airootfs/themes/"
+    echo "✅ Тема MacVentura скопирована"
+else
+    echo "⚠️  Тема MacVentura не найдена в ../themes/MacVentura"
+fi
+
 # Сборка ISO
 echo "🔨 Сборка ISO образа..."
 mkarchiso -v -w "$WORK_DIR/work" -o ../out "$WORK_DIR"

@@ -91,7 +91,6 @@ set -e
 yay -S --noconfirm --removemake --cleanafter latte-dock
 yay -Sc --noconfirm
 EOFLATTE
-# Очистка кэша
 pacman -Scc --noconfirm || true
 rm -rf /var/cache/pacman/pkg/* || true
 echo "Latte Dock установлен!"
@@ -103,63 +102,29 @@ set -e
 yay -S --noconfirm --removemake --cleanafter calamares
 yay -Sc --noconfirm
 EOFCALA
-# Очистка кэша
 pacman -Scc --noconfirm || true
 rm -rf /var/cache/pacman/pkg/* || true
 echo "Calamares установлен!"
 
-# Установка тем macOS из AUR
-echo "Установка тем macOS из AUR..."
-
-# MacSonoma KDE theme
-sudo -u liveuser bash << 'EOFTHEME'
-set -e
-yay -S --noconfirm --removemake --cleanafter macsonoma-kde-git || echo "MacSonoma theme пропущена"
-yay -Sc --noconfirm
-EOFTHEME
-pacman -Scc --noconfirm || true
-
-# WhiteSur GTK theme
-sudo -u liveuser bash << 'EOFGTK'
-set -e
-yay -S --noconfirm --removemake --cleanafter whitesur-gtk-theme-git || echo "WhiteSur GTK пропущена"
-yay -Sc --noconfirm
-EOFGTK
-pacman -Scc --noconfirm || true
-
-# WhiteSur Icon theme
+# Установка WhiteSur Icons
+echo "Установка WhiteSur Icons из AUR..."
 sudo -u liveuser bash << 'EOFICON'
 set -e
 yay -S --noconfirm --removemake --cleanafter whitesur-icon-theme-git || echo "WhiteSur Icons пропущены"
 yay -Sc --noconfirm
 EOFICON
 pacman -Scc --noconfirm || true
+echo "WhiteSur Icons установлены!"
 
-# WhiteSur Cursors
+# Установка WhiteSur Cursors
+echo "Установка WhiteSur Cursors из AUR..."
 sudo -u liveuser bash << 'EOFCURSOR'
 set -e
 yay -S --noconfirm --removemake --cleanafter whitesur-cursors-git || echo "WhiteSur Cursors пропущены"
 yay -Sc --noconfirm
 EOFCURSOR
 pacman -Scc --noconfirm || true
-
-# Albert Launcher
-sudo -u liveuser bash << 'EOFALBERT'
-set -e
-yay -S --noconfirm --removemake --cleanafter albert || echo "Albert пропущен"
-yay -Sc --noconfirm
-EOFALBERT
-pacman -Scc --noconfirm || true
-
-# Lightly Application Style
-sudo -u liveuser bash << 'EOFLIGHTLY'
-set -e
-yay -S --noconfirm --removemake --cleanafter lightly-qt || echo "Lightly пропущен"
-yay -Sc --noconfirm
-EOFLIGHTLY
-pacman -Scc --noconfirm || true
-
-echo "Темы macOS установлены!"
+echo "WhiteSur Cursors установлены!"
 
 # Финальная очистка кэша AUR
 echo "Финальная очистка кэша..."
@@ -198,18 +163,52 @@ EOFAUTO
 
 echo "Calamares настроен для автозапуска!"
 
-# Установка тем из ZIP файлов
-echo "Установка тем macOS из ZIP файлов..."
-if [ -d /usr/share/320kgpenguin-themes ]; then
-    chmod +x /usr/local/bin/install-themes.sh
-    sudo -u liveuser bash << 'EOFTHEMES'
+# Копирование темы MacVentura
+echo "Копирование темы MacVentura..."
+if [ -d /themes/MacVentura ]; then
+    mkdir -p /usr/share/macventura-theme
+    cp -r /themes/MacVentura/* /usr/share/macventura-theme/
+    chmod +x /usr/share/macventura-theme/install.sh
+    chmod +x /usr/local/bin/install-macventura-theme.sh
+    echo "✅ Тема MacVentura скопирована"
+else
+    echo "⚠️  Тема MacVentura не найдена"
+fi
+
+# Установка темы MacVentura (системная установка)
+echo "Установка темы MacVentura..."
+if [ -f /usr/local/bin/install-macventura-theme.sh ]; then
+    # Установка от root для системы
+    bash /usr/local/bin/install-macventura-theme.sh
+    
+    # Применение темы для liveuser
+    sudo -u liveuser bash << 'EOFTHEME'
 export HOME=/home/liveuser
 export USER=liveuser
-/usr/local/bin/install-themes.sh
-EOFTHEMES
-    echo "Темы установлены!"
+
+# Применение Kvantum темы
+if command -v kvantummanager &> /dev/null; then
+    mkdir -p "$HOME/.config/Kvantum"
+    echo "theme=MacVentura" > "$HOME/.config/Kvantum/kvantum.kvconfig"
+fi
+
+# Применение глобальной темы KDE
+kwriteconfig5 --file kdeglobals --group KDE --key LookAndFeelPackage "com.github.vinceliuice.MacVentura-Dark"
+kwriteconfig5 --file kdeglobals --group General --key ColorScheme "MacVenturaDark"
+kwriteconfig5 --file kwinrc --group org.kde.kdecoration2 --key theme "__aurorae__svg__MacVentura-Dark"
+kwriteconfig5 --file plasmarc --group Theme --key name "MacVentura-Dark"
+
+# Применение иконок WhiteSur
+kwriteconfig5 --file kdeglobals --group Icons --key Theme "WhiteSur-dark"
+
+# Применение курсоров WhiteSur
+kwriteconfig5 --file kcminputrc --group Mouse --key cursorTheme "WhiteSur-cursors"
+
+EOFTHEME
+    
+    echo "✅ Тема MacVentura установлена и применена"
 else
-    echo "Темы не найдены, пропускаем установку"
+    echo "⚠️  Скрипт установки темы не найден"
 fi
 
 # Копирование конфигов для всех пользователей
@@ -354,9 +353,10 @@ echo ""
 echo "ВСЕ КОМПОНЕНТЫ УЖЕ УСТАНОВЛЕНЫ:"
 echo "  - Latte Dock (панель внизу)"
 echo "  - Calamares (установщик)"
-echo "  - Темы macOS (WhiteSur, MacSonoma, Albert)"
+echo "  - Тема MacVentura"
+echo "  - WhiteSur Icons & Cursors"
 echo ""
-echo "Базовые темы установлены из ZIP файлов"
+echo "Тема MacVentura установлена"
 echo "Все настройки macOS применены"
 echo ""
 echo "=== Конец кастомизации ==="

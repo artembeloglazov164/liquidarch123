@@ -1,72 +1,57 @@
-# Темы macOS для macOS Arch
+# Темы для macOS Arch
 
-Положите сюда ZIP файлы с темами:
+## MacVentura Theme
 
-## Структура:
+Полная тема macOS Ventura для KDE Plasma, включающая:
 
+- **Aurorae Theme** - оформление окон (с закругленными углами)
+- **Kvantum Theme** - стилизация Qt приложений
+- **Plasma Color Scheme** - цветовая схема
+- **Plasma Desktop Theme** - тема рабочего стола
+- **Plasma Global Theme** - глобальная тема
+- **Wallpapers** - обои macOS Ventura
+- **Latte Dock layouts** - готовые конфигурации Latte Dock
+
+### Установка
+
+Тема устанавливается автоматически при сборке ISO через скрипт:
+```bash
+/usr/local/bin/install-macventura-theme.sh
 ```
-themes/
-├── MacSonoma-kde.zip          # Plasma тема
-├── Whitesur-gtk-theme.zip     # GTK тема
-├── Whitesur-icon-theme.zip    # Иконки
-├── Whitesur-cursors.zip       # Курсоры
-├── Lightly.zip                # Application Style
-└── Albert.zip                 # Launcher (опционально)
+
+### Ручная установка
+
+Если нужно переустановить тему:
+```bash
+cd /usr/share/macventura-theme
+sudo bash install.sh --round --color dark
 ```
 
-## Формат ZIP:
+### Применение темы
 
-Каждый ZIP должен содержать готовую структуру для установки:
+Тема применяется автоматически для всех пользователей. Для ручного применения:
 
-### Plasma Theme (MacSonoma-kde.zip)
-```
-MacSonoma/
-├── metadata.desktop
-├── colors
-└── ...
-```
-Устанавливается в: `~/.local/share/plasma/desktoptheme/`
+1. **Kvantum Manager**:
+   ```bash
+   kvantummanager
+   ```
+   Выберите тему "MacVentura"
 
-### GTK Theme (Whitesur-gtk-theme.zip)
-```
-WhiteSur/
-├── gtk-3.0/
-├── gtk-4.0/
-└── ...
-```
-Устанавливается в: `~/.themes/`
+2. **System Settings**:
+   - Appearance → Global Theme → MacVentura-Dark
+   - Appearance → Colors → MacVenturaDark
+   - Window Decorations → MacVentura-Dark
 
-### Icon Theme (Whitesur-icon-theme.zip)
-```
-WhiteSur/
-├── index.theme
-├── apps/
-├── places/
-└── ...
-```
-Устанавливается в: `~/.local/share/icons/`
+### Рекомендуемые дополнения
 
-### Cursors (Whitesur-cursors.zip)
-```
-WhiteSur-cursors/
-├── index.theme
-└── cursors/
-```
-Устанавливается в: `~/.local/share/icons/`
+Для полного macOS опыта установите:
+- **WhiteSur Icon Theme** (устанавливается автоматически из AUR)
+- **WhiteSur Cursors** (устанавливается автоматически из AUR)
 
-### Lightly (Lightly.zip)
-```
-Lightly/
-└── (файлы стиля)
-```
-Устанавливается в: `~/.local/share/kstyle/`
+### Источник
 
-## Автоматическая установка
+Тема MacVentura: https://github.com/vinceliuice/MacVentura-kde
 
-Скрипт `install-themes.sh` автоматически:
-1. Найдет все ZIP файлы в этой директории
-2. Распакует их в правильные места
-3. Применит темы
-4. Настроит Albert launcher (если есть)
+### Лицензия
 
-Просто положите ZIP файлы сюда и пересоберите ISO!
+См. LICENSE файл в директории MacVentura/

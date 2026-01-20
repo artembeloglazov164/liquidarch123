@@ -114,14 +114,11 @@ install_package() {
     fi
 }
 
-# Установка пакетов
+# Установка пакетов из AUR
 install_package "Latte Dock" "latte-dock"
 install_package "Calamares" "calamares"
-install_package "MacSonoma Theme" "macsonoma-kde-git"
-install_package "WhiteSur GTK Theme" "whitesur-gtk-theme-git"
 install_package "WhiteSur Icons" "whitesur-icon-theme-git"
 install_package "WhiteSur Cursors" "whitesur-cursors-git"
-install_package "Albert Launcher" "albert"
 
 # Очистка кэша
 echo ""
@@ -130,6 +127,24 @@ echo "Очистка кэша..."
 echo "----------------------------------------------------------------"
 sudo -u liveuser yay -Sc --noconfirm || true
 rm -rf /home/liveuser/.cache/yay
+
+# Применение иконок и курсоров для liveuser
+echo ""
+echo "----------------------------------------------------------------"
+echo "Применение тем..."
+echo "----------------------------------------------------------------"
+sudo -u liveuser bash << 'EOFAPPLY'
+export HOME=/home/liveuser
+export USER=liveuser
+
+# Применение иконок WhiteSur
+kwriteconfig5 --file kdeglobals --group Icons --key Theme "WhiteSur-dark"
+
+# Применение курсоров WhiteSur
+kwriteconfig5 --file kcminputrc --group Mouse --key cursorTheme "WhiteSur-cursors"
+
+echo "✅ Иконки и курсоры применены"
+EOFAPPLY
 
 # Отметка о выполнении
 touch "$MARKER"
@@ -188,18 +203,46 @@ EOFDESKTOP
 
 echo "Сервис первого запуска создан!"
 
-# Установка тем из ZIP файлов
-echo "Установка тем macOS из ZIP файлов..."
-if [ -d /usr/share/320kgpenguin-themes ]; then
-    chmod +x /usr/local/bin/install-themes.sh
-    sudo -u liveuser bash << 'EOFTHEMES'
+# Копирование темы MacVentura
+echo "Копирование темы MacVentura..."
+if [ -d /themes/MacVentura ]; then
+    mkdir -p /usr/share/macventura-theme
+    cp -r /themes/MacVentura/* /usr/share/macventura-theme/
+    chmod +x /usr/share/macventura-theme/install.sh
+    chmod +x /usr/local/bin/install-macventura-theme.sh
+    echo "✅ Тема MacVentura скопирована"
+else
+    echo "⚠️  Тема MacVentura не найдена"
+fi
+
+# Установка темы MacVentura (системная установка)
+echo "Установка темы MacVentura..."
+if [ -f /usr/local/bin/install-macventura-theme.sh ]; then
+    # Установка от root для системы
+    bash /usr/local/bin/install-macventura-theme.sh
+    
+    # Применение темы для liveuser
+    sudo -u liveuser bash << 'EOFTHEME'
 export HOME=/home/liveuser
 export USER=liveuser
-/usr/local/bin/install-themes.sh
-EOFTHEMES
-    echo "Темы установлены!"
+
+# Применение Kvantum темы
+if command -v kvantummanager &> /dev/null; then
+    mkdir -p "$HOME/.config/Kvantum"
+    echo "theme=MacVentura" > "$HOME/.config/Kvantum/kvantum.kvconfig"
+fi
+
+# Применение глобальной темы KDE
+kwriteconfig5 --file kdeglobals --group KDE --key LookAndFeelPackage "com.github.vinceliuice.MacVentura-Dark"
+kwriteconfig5 --file kdeglobals --group General --key ColorScheme "MacVenturaDark"
+kwriteconfig5 --file kwinrc --group org.kde.kdecoration2 --key theme "__aurorae__svg__MacVentura-Dark"
+kwriteconfig5 --file plasmarc --group Theme --key name "MacVentura-Dark"
+
+EOFTHEME
+    
+    echo "✅ Тема MacVentura установлена и применена"
 else
-    echo "Темы не найдены, пропускаем установку"
+    echo "⚠️  Скрипт установки темы не найден"
 fi
 
 echo "Базовая настройка завершена!"
@@ -347,10 +390,10 @@ echo ""
 echo "Что будет установлено из AUR:"
 echo "  - Latte Dock (панель внизу)"
 echo "  - Calamares (установщик)"
-echo "  - Темы macOS (WhiteSur, MacSonoma, Albert)"
+echo "  - WhiteSur Icons & Cursors"
 echo ""
 echo "Требуется интернет соединение при первом запуске"
-echo "Базовые темы установлены из ZIP файлов"
+echo "Тема MacVentura установлена"
 echo "Все настройки macOS применены"
 echo ""
 echo "=== Конец кастомизации ==="
