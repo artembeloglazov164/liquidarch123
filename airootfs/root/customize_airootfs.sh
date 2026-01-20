@@ -39,20 +39,24 @@ EOF
 echo "Установка yay..."
 cd /tmp
 
-# Исправление для работы в chroot
-export PKGDEST=/tmp/packages
-mkdir -p /tmp/packages
-chown -R liveuser:liveuser /tmp/packages
-chmod 755 /tmp/packages
-
-# Установка yay-bin (бинарная версия, не требует компиляции Go)
+# Установка yay-bin вручную (обход проблемы с pacman в chroot)
 sudo -u liveuser bash << 'EOFYAY'
 set -e
-export PKGDEST=/tmp/packages
 cd /tmp
 git clone https://aur.archlinux.org/yay-bin.git
 cd yay-bin
-makepkg -si --noconfirm --skippgpcheck
+
+# Скачивание и распаковка yay-bin
+curl -L -o yay_12.5.7_x86_64.tar.gz https://github.com/Jguer/yay/releases/download/v12.5.7/yay_12.5.7_x86_64.tar.gz
+tar -xzf yay_12.5.7_x86_64.tar.gz
+
+# Установка вручную
+cd yay_12.5.7_x86_64
+sudo install -Dm755 yay /usr/bin/yay
+sudo install -Dm644 yay.8 /usr/share/man/man8/yay.8
+sudo install -Dm644 yay.fish /usr/share/fish/vendor_completions.d/yay.fish
+sudo install -Dm644 yay.bash /usr/share/bash-completion/completions/yay
+
 cd /tmp
 rm -rf yay-bin
 EOFYAY
